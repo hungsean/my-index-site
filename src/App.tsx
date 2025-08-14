@@ -1,34 +1,24 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Button } from '@/components/ui/button'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+    <div className="flex min-h-svh flex-col items-center justify-center space-y-4">
+      <h1 className="text-4xl font-bold">Vite + React + shadcn/ui</h1>
+      <div className="space-y-2">
+        <Button onClick={() => setCount((count) => count + 1)}>
           count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        </Button>
+        <Button variant="outline">Outline Button</Button>
+        <Button variant="secondary">Secondary Button</Button>
+        <Button variant="destructive">Destructive Button</Button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+      <p className="text-muted-foreground">
+        shadcn/ui has been successfully installed!
       </p>
-    </>
+    </div>
   )
 }
 
