@@ -45,61 +45,75 @@ function App() {
   ]
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md mx-auto">
-        <CardContent className="pt-8 pb-6 px-6">
-          {/* 頭像區域 */}
-          <div className="flex flex-col items-center space-y-4">
-            <Avatar className="w-32 h-32">
-              <AvatarImage 
-                src="/placeholder-avatar.jpg" 
-                alt="個人頭像" 
-                className="object-cover"
-              />
-              <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">
-                你
-              </AvatarFallback>
-            </Avatar>
-            
-            {/* 姓名區域 */}
-            <div className="text-center space-y-2">
-              <h1 className="text-3xl font-bold text-foreground">
-                你的名字
-              </h1>
+    <div className="min-h-screen relative flex items-center justify-center p-4">
+      {/* 背景圖片層 */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url("/background.jpg")',
+        }}
+      >
+        {/* 背景遮罩 */}
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      </div>
+      
+      {/* 內容層 */}
+      <div className="relative z-10 w-full max-w-md mx-auto">
+        <Card className="backdrop-blur-md bg-card/80 border-border/20">
+          <CardContent className="pt-8 pb-6 px-6">
+            {/* 頭像和基本資訊區域 */}
+            <div className="flex flex-col items-center space-y-4 mb-6">
+              <Avatar className="w-32 h-32 ring-4 ring-primary/20">
+                <AvatarImage 
+                  src="/placeholder-avatar.jpg" 
+                  alt="個人頭像" 
+                  className="object-cover"
+                />
+                <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">
+                  你
+                </AvatarFallback>
+              </Avatar>
               
-              {/* 興趣標籤 */}
-              <p className="text-lg text-muted-foreground font-medium">
-                遊戲 | 程式 | 僕咖 | 地偶
-              </p>
+              {/* 姓名區域 */}
+              <div className="text-center space-y-2">
+                <h1 className="text-3xl font-bold text-foreground">
+                  你的名字
+                </h1>
+                
+                {/* 興趣標籤 */}
+                <p className="text-lg text-muted-foreground font-medium">
+                  遊戲 | 程式 | 僕咖 | 地偶
+                </p>
+              </div>
             </div>
             
-            {/* 社交媒體按鈕組 */}
-            <div className="flex flex-wrap justify-center gap-3 pt-4">
+            {/* 社交媒體按鈕組 - 垂直排列 */}
+            <div className="space-y-3 max-h-64 overflow-y-auto">
               {socialLinks.map((social) => {
                 const IconComponent = social.icon
                 return (
                   <Button
                     key={social.name}
                     variant="outline"
-                    size="icon"
-                    className={`transition-colors duration-200 ${social.color}`}
+                    className={`w-full justify-start gap-3 h-12 transition-all duration-200 ${social.color} hover:scale-105 backdrop-blur-sm`}
                     asChild
                   >
                     <a
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={social.name}
+                      className="flex items-center"
                     >
-                      <IconComponent className="h-5 w-5" />
+                      <IconComponent className="h-5 w-5 flex-shrink-0" />
+                      <span className="font-medium">{social.name}</span>
                     </a>
                   </Button>
                 )
               })}
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
