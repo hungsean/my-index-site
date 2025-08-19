@@ -3,10 +3,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Toaster } from '@/components/ui/sonner'
-import { Github, Twitter, Linkedin, Mail, Instagram, MessageCircle, Moon, Sun } from 'lucide-react'
+import { Github, X, Linkedin, Mail, Instagram, MessageCircle, Moon, Sun, Globe } from 'lucide-react'
 import { toast } from 'sonner'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ThemeProvider, useTheme } from 'next-themes'
+import type { SiteConfig, SocialLink } from '@/types/config'
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -26,12 +27,37 @@ function ThemeToggle() {
 }
 
 function App() {
-  // Dialog 狀態管理
+  // 狀態管理
+  const [config, setConfig] = useState<SiteConfig | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [dialogContent, setDialogContent] = useState('')
 
+  // 載入配置文件
+  useEffect(() => {
+    const loadConfig = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch('/config.json')
+        if (!response.ok) {
+          throw new Error('無法載入配置文件')
+        }
+        const data = await response.json()
+        setConfig(data)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '載入配置失敗')
+        console.error('載入配置失敗:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadConfig()
+  }, [])
+
   // 處理不同類型的點擊事件
-  const handleSocialClick = async (social: typeof socialLinks[0]) => {
+  const handleSocialClick = async (social: SocialLink) => {
     switch (social.type) {
       case 'link':
         // 正常連結會由 <a> 標籤處理
@@ -56,58 +82,50 @@ function App() {
     }
   };
 
-  // 社交媒體連結配置
-  const socialLinks = [
-    {
-      name: 'GitHub',
-      icon: Github,
-      url: 'https://github.com/yourusername',
-      color: 'hover:text-gray-800 dark:hover:text-gray-300',
-      type: 'link' as const
+  // 圖標映射
+  const iconMap = {
+    Github,
+    Twitter: X,
+    Linkedin,
+    Mail,
+    Instagram,
+    MessageCircle,
+    Globe
+  }
+
+  // 預設配置（當載入失敗時使用）
+  const defaultConfig: SiteConfig = {
+    profile: {
+      name: "千円",
+      interests: "遊戲 | 程式 | 僕咖 | 地偶",
+      avatar: {
+        src: "https://img.senen.dev/IMG_20240704_135615_512x512.jpg",
+        alt: "個人頭像",
+        fallback: "你"
+      },
+      background: {
+        src: "https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg"
+      }
     },
-    {
-      name: 'Twitter',
-      icon: Twitter,
-      url: 'https://twitter.com/yourusername',
-      color: 'hover:text-blue-400',
-      type: 'link' as const
-    },
-    {
-      name: 'LinkedIn',
-      icon: Linkedin,
-      url: 'https://linkedin.com/in/yourusername',
-      color: 'hover:text-blue-600',
-      type: 'link' as const
-    },
-    {
-      name: 'Instagram',
-      icon: Instagram,
-      url: 'https://instagram.com/yourusername',
-      color: 'hover:text-pink-400',
-      type: 'link' as const
-    },
-    {
-      name: 'Discord',
-      icon: MessageCircle,
-      url: 'yourUsername#1234',
-      color: 'hover:text-purple-400',
-      type: 'copy' as const
-    },
-    {
-      name: 'Email',
-      icon: Mail,
-      url: 'mailto:your.email@example.com',
-      color: 'hover:text-green-400',
-      type: 'link' as const
-    },
-    {
-      name: '我的網站',
-      icon: () => <span className="text-lg">🌐</span>,
-      url: '就是這個網站！',
-      color: 'hover:text-orange-400',
-      type: 'text' as const
-    }
-  ]
+    socialLinks: []
+  }
+
+  // 如果正在載入，顯示載入動畫
+  if (loading) {
+    return (
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="text-center space-y-4">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-muted-foreground">載入中...</p>
+          </div>
+        </div>
+      </ThemeProvider>
+    )
+  }
+
+  // 使用配置或預設值
+  const currentConfig = config || defaultConfig
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -118,7 +136,7 @@ function App() {
       <div 
         className="fixed inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
         style={{
-          backgroundImage: 'url(https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg)',
+          backgroundImage: `url(${currentConfig.profile.background.src})`,
         }}
       >
         {/* 背景遮罩 - 根據主題調整顏色 */}
@@ -133,32 +151,44 @@ function App() {
             <div className="flex flex-col items-center space-y-4 mb-6">
               <Avatar className="w-32 h-32 ring-4 ring-primary/20">
                 <AvatarImage 
-                  src="https://img.senen.dev/IMG_20240704_135615_512x512.jpg" 
-                  alt="個人頭像" 
+                  src={currentConfig.profile.avatar.src} 
+                  alt={currentConfig.profile.avatar.alt} 
                   className="object-cover"
                 />
                 <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">
-                  你
+                  {currentConfig.profile.avatar.fallback}
                 </AvatarFallback>
               </Avatar>
               
               {/* 姓名區域 */}
               <div className="text-center space-y-2">
                 <h1 className="text-3xl font-bold text-foreground">
-                  千円
+                  {currentConfig.profile.name}
                 </h1>
                 
                 {/* 興趣標籤 */}
                 <p className="text-lg text-muted-foreground font-medium">
-                  遊戲 | 程式 | 僕咖 | 地偶
+                  {currentConfig.profile.interests}
                 </p>
               </div>
             </div>
             
+            {/* 錯誤提示 */}
+            {error && (
+              <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                <p className="text-sm text-destructive text-center">
+                  {error}
+                </p>
+                <p className="text-xs text-muted-foreground text-center mt-1">
+                  使用預設配置
+                </p>
+              </div>
+            )}
+            
             {/* 社交媒體按鈕組 - 垂直排列 */}
             <div className="space-y-3">
-              {socialLinks.map((social) => {
-                const IconComponent = social.icon
+              {currentConfig.socialLinks.map((social) => {
+                const IconComponent = iconMap[social.icon as keyof typeof iconMap] || Globe
                 
                 if (social.type === 'link') {
                   return (

@@ -23,7 +23,7 @@ This is a personal portfolio/landing page built with React + TypeScript + Vite u
 - `pnpm lint` - Run ESLint on all files
 
 ### Type Checking
-- `tsc -b` - Run TypeScript compiler for type checking (included in build process)
+- `pnpm exec tsc -b` - Run TypeScript compiler for type checking (included in build process)
 
 ### shadcn/ui Components
 - `pnpm dlx shadcn@latest add [component]` - Add new shadcn/ui components
