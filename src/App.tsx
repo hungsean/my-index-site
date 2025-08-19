@@ -46,26 +46,26 @@ function App() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4">
-      {/* 背景圖片層 */}
+      {/* 背景圖片層 - 固定不捲動 */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
         style={{
-          backgroundImage: 'url("/background.jpg")',
+          backgroundImage: 'url(https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg)',
         }}
       >
         {/* 背景遮罩 */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
       </div>
       
       {/* 內容層 */}
       <div className="relative z-10 w-full max-w-md mx-auto">
-        <Card className="backdrop-blur-md bg-card/80 border-border/20">
+        <Card className="backdrop-blur-md bg-card/70 border-border/20">
           <CardContent className="pt-8 pb-6 px-6">
             {/* 頭像和基本資訊區域 */}
             <div className="flex flex-col items-center space-y-4 mb-6">
               <Avatar className="w-32 h-32 ring-4 ring-primary/20">
                 <AvatarImage 
-                  src="/placeholder-avatar.jpg" 
+                  src="https://img.senen.dev/IMG_20240704_135615_512x512.jpg" 
                   alt="個人頭像" 
                   className="object-cover"
                 />
@@ -77,7 +77,7 @@ function App() {
               {/* 姓名區域 */}
               <div className="text-center space-y-2">
                 <h1 className="text-3xl font-bold text-foreground">
-                  你的名字
+                  千円
                 </h1>
                 
                 {/* 興趣標籤 */}
@@ -88,7 +88,7 @@ function App() {
             </div>
             
             {/* 社交媒體按鈕組 - 垂直排列 */}
-            <div className="space-y-3 max-h-64 overflow-y-auto">
+            <div className="space-y-3">
               {socialLinks.map((social) => {
                 const IconComponent = social.icon
                 return (

@@ -3,7 +3,14 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-This is a React + TypeScript + Vite project using pnpm as the package manager. The project includes shadcn/ui component library with Tailwind CSS v4 for styling. It's built with modern tooling including ESLint for code quality.
+This is a personal portfolio/landing page built with React + TypeScript + Vite using pnpm as the package manager. The project showcases personal information and social media links in a card-based layout. It includes shadcn/ui component library with Tailwind CSS v4 for styling and is built with modern tooling including ESLint for code quality.
+
+### Current Implementation
+- Personal information card with avatar and interests
+- Social media links (GitHub, Twitter, LinkedIn, Instagram, Discord, Email)
+- Fixed background image with blur effects
+- Responsive design with backdrop-blur styling
+- User: 千円 with interests: 遊戲 | 程式 | 僕咖 | 地偶
 
 ## Development Commands
 
@@ -59,8 +66,16 @@ This is a React + TypeScript + Vite project using pnpm as the package manager. T
 - Uses `oklch()` color space for better color consistency
 
 ### Available Components
+Currently implemented shadcn/ui components:
+- Avatar (with AvatarImage and AvatarFallback)
 - Button (with variants: default, destructive, outline, secondary, ghost, link)
+- Card (with CardContent)
 - Additional components can be added with `pnpm dlx shadcn@latest add [component]`
+
+### Current Assets
+- Background image: `https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg`
+- Avatar image: `https://img.senen.dev/IMG_20240704_135615_512x512.jpg`
+- Icons: Using Lucide React (Github, Twitter, Linkedin, Mail, Instagram, MessageCircle)
 
 ## Development Notes
 - Hot Module Replacement (HMR) is configured and working
