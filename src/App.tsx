@@ -1,51 +1,100 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Toaster } from '@/components/ui/sonner'
 import { Github, Twitter, Linkedin, Mail, Instagram, MessageCircle } from 'lucide-react'
+import { toast } from 'sonner'
+import { useState } from 'react'
+import { ThemeProvider } from 'next-themes'
 
 function App() {
+  // Dialog 狀態管理
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [dialogContent, setDialogContent] = useState('')
+
+  // 處理不同類型的點擊事件
+  const handleSocialClick = async (social: typeof socialLinks[0]) => {
+    switch (social.type) {
+      case 'link':
+        // 正常連結會由 <a> 標籤處理
+        break;
+      case 'copy':
+        try {
+          await navigator.clipboard.writeText(social.url);
+          toast.success(`已複製 ${social.name}`, {
+            description: social.url,
+          });
+        } catch (err) {
+          console.error('複製失敗:', err);
+          toast.error('複製失敗', {
+            description: '請手動複製',
+          });
+        }
+        break;
+      case 'text':
+        setDialogContent(social.url);
+        setDialogOpen(true);
+        break;
+    }
+  };
+
   // 社交媒體連結配置
   const socialLinks = [
     {
       name: 'GitHub',
       icon: Github,
       url: 'https://github.com/yourusername',
-      color: 'hover:text-gray-300'
+      color: 'hover:text-gray-300',
+      type: 'link' as const
     },
     {
       name: 'Twitter',
       icon: Twitter,
       url: 'https://twitter.com/yourusername',
-      color: 'hover:text-blue-400'
+      color: 'hover:text-blue-400',
+      type: 'link' as const
     },
     {
       name: 'LinkedIn',
       icon: Linkedin,
       url: 'https://linkedin.com/in/yourusername',
-      color: 'hover:text-blue-600'
+      color: 'hover:text-blue-600',
+      type: 'link' as const
     },
     {
       name: 'Instagram',
       icon: Instagram,
       url: 'https://instagram.com/yourusername',
-      color: 'hover:text-pink-400'
+      color: 'hover:text-pink-400',
+      type: 'link' as const
     },
     {
       name: 'Discord',
       icon: MessageCircle,
-      url: '#',
-      color: 'hover:text-purple-400'
+      url: 'yourUsername#1234',
+      color: 'hover:text-purple-400',
+      type: 'copy' as const
     },
     {
       name: 'Email',
       icon: Mail,
       url: 'mailto:your.email@example.com',
-      color: 'hover:text-green-400'
+      color: 'hover:text-green-400',
+      type: 'link' as const
+    },
+    {
+      name: '我的網站',
+      icon: () => <span className="text-lg">🌐</span>,
+      url: '就是這個網站！',
+      color: 'hover:text-orange-400',
+      type: 'text' as const
     }
   ]
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4">
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <div className="min-h-screen relative flex items-center justify-center p-4">
       {/* 背景圖片層 - 固定不捲動 */}
       <div 
         className="fixed inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
@@ -91,30 +140,61 @@ function App() {
             <div className="space-y-3">
               {socialLinks.map((social) => {
                 const IconComponent = social.icon
-                return (
-                  <Button
-                    key={social.name}
-                    variant="outline"
-                    className={`w-full justify-start gap-3 h-12 transition-all duration-200 ${social.color} hover:scale-105 backdrop-blur-sm`}
-                    asChild
-                  >
-                    <a
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center"
+                
+                if (social.type === 'link') {
+                  return (
+                    <Button
+                      key={social.name}
+                      variant="outline"
+                      className={`w-full justify-start gap-3 h-12 transition-all duration-200 ${social.color} hover:scale-105 backdrop-blur-sm`}
+                      asChild
+                    >
+                      <a
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center"
+                      >
+                        <IconComponent className="h-5 w-5 flex-shrink-0" />
+                        <span className="font-medium">{social.name}</span>
+                      </a>
+                    </Button>
+                  )
+                } else {
+                  return (
+                    <Button
+                      key={social.name}
+                      variant="outline"
+                      className={`w-full justify-start gap-3 h-12 transition-all duration-200 ${social.color} hover:scale-105 backdrop-blur-sm`}
+                      onClick={() => handleSocialClick(social)}
                     >
                       <IconComponent className="h-5 w-5 flex-shrink-0" />
                       <span className="font-medium">{social.name}</span>
-                    </a>
-                  </Button>
-                )
+                    </Button>
+                  )
+                }
               })}
             </div>
           </CardContent>
         </Card>
       </div>
-    </div>
+
+      {/* Dialog 彈窗 */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>我的網站</DialogTitle>
+            <DialogDescription>
+              {dialogContent}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      {/* Toast 通知 */}
+      <Toaster />
+      </div>
+    </ThemeProvider>
   )
 }
 
