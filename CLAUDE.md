@@ -7,10 +7,12 @@ This is a personal portfolio/landing page built with React + TypeScript + Vite u
 
 ### Current Implementation
 - Personal information card with avatar and interests
-- Social media links (GitHub, Twitter, LinkedIn, Instagram, Discord, Email)
+- Social media links with three types: link (normal links), copy (copy to clipboard), text (show dialog)
 - Fixed background image with blur effects
 - Responsive design with backdrop-blur styling
 - User: 千円 with interests: 遊戲 | 程式 | 僕咖 | 地偶
+- Toast notifications using Sonner for copy feedback
+- Dialog for text display instead of native alerts
 
 ## Development Commands
 
@@ -26,6 +28,21 @@ This is a personal portfolio/landing page built with React + TypeScript + Vite u
 ### shadcn/ui Components
 - `pnpm dlx shadcn@latest add [component]` - Add new shadcn/ui components
 - `pnpm dlx shadcn@latest add button card dialog` - Add multiple components at once
+
+## UI Implementation Guidelines
+
+### IMPORTANT: shadcn/ui Reference
+- **ALWAYS refer to https://ui.shadcn.com/ for UI implementation questions**
+- Check official documentation for correct component usage, installation, and best practices
+- Do NOT remove or simplify component functionality without consulting the docs
+- Ensure all required dependencies are installed (e.g., next-themes for Sonner)
+- Follow standard implementation patterns from the official examples
+
+### When encountering UI issues:
+1. First check https://ui.shadcn.com/ for the specific component
+2. Review installation requirements and dependencies
+3. Follow the official implementation patterns
+4. Maintain complete component functionality
 
 ## Architecture & Key Files
 
@@ -70,7 +87,23 @@ Currently implemented shadcn/ui components:
 - Avatar (with AvatarImage and AvatarFallback)
 - Button (with variants: default, destructive, outline, secondary, ghost, link)
 - Card (with CardContent)
+- Dialog (with DialogContent, DialogHeader, DialogTitle, DialogDescription)
+- Sonner (toast notifications with theme support via next-themes)
 - Additional components can be added with `pnpm dlx shadcn@latest add [component]`
+
+### Theme Support
+- Uses next-themes for theme management
+- ThemeProvider wraps the entire application
+- Supports system/light/dark themes
+- Toast notifications follow system theme
+
+### Social Links Implementation
+- Three types of social links:
+  - `link`: Normal external links (GitHub, Twitter, LinkedIn, Instagram, Email)
+  - `copy`: Copy to clipboard with toast feedback (Discord)
+  - `text`: Show dialog with message (Website info)
+- Uses Sonner toast for copy success/error feedback
+- Uses Dialog for text display instead of native alerts
 
 ### Current Assets
 - Background image: `https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg`
@@ -82,3 +115,4 @@ Currently implemented shadcn/ui components:
 - ESLint enforces React Hooks rules and React Refresh patterns
 - Build process includes both TypeScript compilation and Vite bundling
 - shadcn/ui components are pre-styled but customizable via props and CSS variables
+- next-themes is installed and configured for theme support
