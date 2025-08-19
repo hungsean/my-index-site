@@ -3,10 +3,27 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Toaster } from '@/components/ui/sonner'
-import { Github, Twitter, Linkedin, Mail, Instagram, MessageCircle } from 'lucide-react'
+import { Github, Twitter, Linkedin, Mail, Instagram, MessageCircle, Moon, Sun } from 'lucide-react'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { ThemeProvider } from 'next-themes'
+import { ThemeProvider, useTheme } from 'next-themes'
+
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+      className="fixed top-4 right-4 z-20 backdrop-blur-md bg-card/70 border-border/20"
+    >
+      <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span className="sr-only">切換主題</span>
+    </Button>
+  )
+}
 
 function App() {
   // Dialog 狀態管理
@@ -45,7 +62,7 @@ function App() {
       name: 'GitHub',
       icon: Github,
       url: 'https://github.com/yourusername',
-      color: 'hover:text-gray-300',
+      color: 'hover:text-gray-800 dark:hover:text-gray-300',
       type: 'link' as const
     },
     {
@@ -95,6 +112,8 @@ function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <div className="min-h-screen relative flex items-center justify-center p-4">
+      {/* 主題切換按鈕 */}
+      <ThemeToggle />
       {/* 背景圖片層 - 固定不捲動 */}
       <div 
         className="fixed inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
@@ -102,8 +121,8 @@ function App() {
           backgroundImage: 'url(https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg)',
         }}
       >
-        {/* 背景遮罩 */}
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+        {/* 背景遮罩 - 根據主題調整顏色 */}
+        <div className="absolute inset-0 bg-white/40 dark:bg-black/30 backdrop-blur-sm" />
       </div>
       
       {/* 內容層 */}
