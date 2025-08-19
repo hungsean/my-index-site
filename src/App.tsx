@@ -18,7 +18,6 @@ import {
   BsFacebook,
   BsTelegram,
   BsWhatsapp,
-  BsWechat,
   BsMoonStars,
   BsSun,
   BsThreads
