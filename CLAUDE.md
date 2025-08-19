@@ -108,7 +108,12 @@ Currently implemented shadcn/ui components:
 ### Current Assets
 - Background image: `https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg`
 - Avatar image: `https://img.senen.dev/IMG_20240704_135615_512x512.jpg`
-- Icons: Using Lucide React (Github, Twitter, Linkedin, Mail, Instagram, MessageCircle)
+- Icons: Using Bootstrap Icons (react-icons/bs) with comprehensive icon mapping system
+  - Supports lowercase icon names (recommended): github, twitter, linkedin, instagram, discord, email, website, etc.
+  - Maintains backward compatibility with original uppercase formats
+  - Automatic fallback to BsGlobe icon for unmapped icons
+  - Twitter automatically maps to BsTwitterX icon
+  - Theme toggle uses BsSun and BsMoonStars icons
 
 ## Development Notes
 - Hot Module Replacement (HMR) is configured and working

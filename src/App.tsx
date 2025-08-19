@@ -3,11 +3,26 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Toaster } from '@/components/ui/sonner'
-import { Github, X, Linkedin, Mail, Instagram, MessageCircle, Moon, Sun, Globe } from 'lucide-react'
 import { toast } from 'sonner'
 import { useState, useEffect } from 'react'
 import { ThemeProvider, useTheme } from 'next-themes'
 import type { SiteConfig, SocialLink } from '@/types/config'
+import { 
+  BsGithub, 
+  BsTwitterX, 
+  BsLinkedin, 
+  BsInstagram, 
+  BsDiscord, 
+  BsEnvelope, 
+  BsGlobe,
+  BsFacebook,
+  BsTelegram,
+  BsWhatsapp,
+  BsWechat,
+  BsMoonStars,
+  BsSun,
+  BsThreads
+} from "react-icons/bs";
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -19,8 +34,8 @@ function ThemeToggle() {
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
       className="fixed top-4 right-4 z-20 backdrop-blur-md bg-card/70 border-border/20"
     >
-      <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <BsSun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <BsMoonStars className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
       <span className="sr-only">切換主題</span>
     </Button>
   )
@@ -82,15 +97,38 @@ function App() {
     }
   };
 
-  // 圖標映射
+  // 圖標映射 - 將設定檔中的 icon 名稱映射到實際的 Bootstrap Icons
   const iconMap = {
-    Github,
-    Twitter: X,
-    Linkedin,
-    Mail,
-    Instagram,
-    MessageCircle,
-    Globe
+    // 社群平台
+    'github': BsGithub,
+    'twitter': BsTwitterX, // Twitter 現在使用 X 圖標
+    'x': BsTwitterX,
+    'linkedin': BsLinkedin,
+    'instagram': BsInstagram,
+    'facebook': BsFacebook,
+    'threads': BsThreads,
+    'discord': BsDiscord,
+    'telegram': BsTelegram,
+    'whatsapp': BsWhatsapp,
+    
+    // 聯絡方式
+    'email': BsEnvelope,
+    'mail': BsEnvelope,
+    
+    // 通用
+    'website': BsGlobe,
+    'blog': BsGlobe,
+    'portfolio': BsGlobe,
+    'globe': BsGlobe,
+    
+    // 兼容性：保持原有的大寫格式
+    'Github': BsGithub,
+    'Twitter': BsTwitterX,
+    'Linkedin': BsLinkedin,
+    'Mail': BsEnvelope,
+    'Instagram': BsInstagram,
+    'MessageCircle': BsDiscord, // 將 MessageCircle 映射到 Discord 圖標
+    'Globe': BsGlobe
   }
 
   // 預設配置（當載入失敗時使用）
@@ -188,7 +226,7 @@ function App() {
             {/* 社交媒體按鈕組 - 垂直排列 */}
             <div className="space-y-3">
               {currentConfig.socialLinks.map((social) => {
-                const IconComponent = iconMap[social.icon as keyof typeof iconMap] || Globe
+                const IconComponent = iconMap[social.icon.toLowerCase() as keyof typeof iconMap] || iconMap[social.icon as keyof typeof iconMap] || BsGlobe
                 
                 if (social.type === 'link') {
                   return (
