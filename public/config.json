@@ -41,6 +41,20 @@
       "type": "link"
     },
     {
+      "name": "Threads(main)",
+      "icon": "threads",
+      "url": "https://www.threads.com/@senen.3454",
+      "color": "hover:text-slate-600 dark:hover:text-slate-300",
+      "type": "link"
+    },
+    {
+      "name": "Threads(idol/maid)",
+      "icon": "threads",
+      "url": "https://www.threads.com/@idol.maid.senen",
+      "color": "hover:text-slate-600 dark:hover:text-slate-300",
+      "type": "link"
+    },
+    {
       "name": "Discord",
       "icon": "discord",
       "url": "senen_3454",

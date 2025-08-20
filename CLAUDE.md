@@ -3,7 +3,13 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-This is a personal portfolio/landing page built with React + TypeScript + Vite using pnpm as the package manager. The project showcases personal information and social media links in a card-based layout. It includes shadcn/ui component library with Tailwind CSS v4 for styling and is built with modern tooling including ESLint for code quality.
+This is a personal website (個人網站) built with React + TypeScript + Vite using pnpm as the package manager. Currently functions like a linktree but positioned for future expansion. The project showcases personal information and social media links in a card-based layout. It includes shadcn/ui component library with Tailwind CSS v4 for styling and is built with modern tooling including ESLint for code quality.
+
+### Website Information
+- **Domain**: senen.dev
+- **Current Title**: 千円 | Developer & Gamer
+- **Positioning**: Personal website (not portfolio) - linktree style with future expansion plans
+- **SEO Description**: "千円的個人網站 - 遊戲玩家 | 程式開發者 | 女僕咖啡廳 | 地下偶像。分享程式、遊戲和生活。"
 
 ### Current Implementation
 - Personal information card with avatar and interests
