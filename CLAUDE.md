@@ -3,22 +3,32 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-This is a personal website (個人網站) built with React + TypeScript + Vite using pnpm as the package manager. Currently functions like a linktree but positioned for future expansion. The project showcases personal information and social media links in a card-based layout. It includes shadcn/ui component library with Tailwind CSS v4 for styling and is built with modern tooling including ESLint for code quality.
+This is a personal website (個人網站) built with React + TypeScript + Vite using pnpm as the package manager. **Recently upgraded from a simple linktree style to a comprehensive multi-section personal portfolio website**. The project showcases personal information, social media links, about section, project portfolio, gaming interests, and contact information in a modern, responsive design. It includes shadcn/ui component library with Tailwind CSS v4 for styling and is built with modern tooling including ESLint for code quality.
 
 ### Website Information
 - **Domain**: senen.dev
 - **Current Title**: 千円 | Developer & Gamer
-- **Positioning**: Personal website (not portfolio) - linktree style with future expansion plans
+- **Positioning**: Complete personal developer portfolio website (upgraded from linktree style)
 - **SEO Description**: "千円的個人網站 - 遊戲玩家 | 程式開發者 | 女僕咖啡廳 | 地下偶像。分享程式、遊戲和生活。"
 
 ### Current Implementation
-- Personal information card with avatar and interests
+**Multi-section layout with 5 main areas:**
+- **Hero Section**: Full-screen welcome area with gradient background, avatar, social links in horizontal layout
+- **About Section**: Two-column card layout featuring personal story and skills badges
+- **Projects Section**: 3-column grid showcasing project portfolio with images, descriptions, tech stacks
+- **Games Section**: 4-column grid displaying gaming interests with status badges
+- **Contact Section**: 3-column contact methods (email, Discord, coffee chat)
+
+**Key Features:**
 - Social media links with three types: link (normal links), copy (copy to clipboard), text (show dialog)
-- Fixed background image with blur effects
-- Responsive design with backdrop-blur styling
+- Smooth scrolling between sections
+- Gradient backgrounds with section-based styling
+- Fully responsive design optimized for mobile, tablet, and desktop
 - User: 千円 with interests: 遊戲 | 程式 | 僕咖 | 地偶
 - Toast notifications using Sonner for copy feedback
 - Dialog for text display instead of native alerts
+- Image fallback system for project and game images
+- Hover animations and scale effects throughout
 
 ## Development Commands
 
@@ -62,10 +72,20 @@ This is a personal website (個人網站) built with React + TypeScript + Vite u
 ### Project Structure
 - `src/` - Source code directory
 - `src/components/ui/` - shadcn/ui components (auto-generated)
+- `src/components/sections/` - Main section components
+  - `Hero.tsx` - Welcome section with social links
+  - `About.tsx` - Personal story and skills section
+  - `Projects.tsx` - Portfolio projects display
+  - `Games.tsx` - Gaming interests showcase
+  - `Contact.tsx` - Contact information and methods
+- `src/components/ImageWithFallback.tsx` - Image loading with fallback support
 - `src/lib/utils.ts` - Utility functions including `cn()` for class merging
+- `src/types/config.ts` - TypeScript type definitions for configuration
+- `public/config.json` - Main configuration file for site content
 - `public/` - Static assets served by Vite
 - `dist/` - Build output (ignored by ESLint)
 - `components.json` - shadcn/ui configuration
+- `.local/` - Development files and documentation
 
 ### TypeScript Configuration
 - Strict mode enabled with modern ES2022 target
@@ -91,8 +111,9 @@ This is a personal website (個人網站) built with React + TypeScript + Vite u
 ### Available Components
 Currently implemented shadcn/ui components:
 - Avatar (with AvatarImage and AvatarFallback)
+- Badge (for skill tags and status indicators)
 - Button (with variants: default, destructive, outline, secondary, ghost, link)
-- Card (with CardContent)
+- Card (with CardContent, CardHeader, CardTitle, CardDescription)
 - Dialog (with DialogContent, DialogHeader, DialogTitle, DialogDescription)
 - Sonner (toast notifications with theme support via next-themes)
 - Additional components can be added with `pnpm dlx shadcn@latest add [component]`
@@ -121,9 +142,63 @@ Currently implemented shadcn/ui components:
   - Twitter automatically maps to BsTwitterX icon
   - Theme toggle uses BsSun and BsMoonStars icons
 
+## Configuration System
+
+### Main Configuration File: `public/config.json`
+
+**Original (Backward Compatible):**
+```json
+{
+  "profile": { "name": "千円", "interests": "遊戲 | 程式 | 僕咖 | 地偶", ... },
+  "socialLinks": [ ... ]
+}
+```
+
+**Extended (Optional New Sections):**
+```json
+{
+  "about": {
+    "story": "Personal story text...",
+    "skills": ["React", "TypeScript", "Node.js", ...]
+  },
+  "projects": [
+    {
+      "title": "Project Name",
+      "description": "Project description",
+      "image": "project image keywords",
+      "technologies": ["React", "TypeScript"],
+      "githubUrl": "GitHub link",
+      "liveUrl": "Live demo link"
+    }
+  ],
+  "games": [
+    {
+      "title": "Game Name", 
+      "description": "Game description",
+      "image": "game image keywords",
+      "genre": "RPG",
+      "platform": "PC / Mobile",
+      "status": "正在遊玩"
+    }
+  ]
+}
+```
+
+### Fallback System
+- **Backward Compatible**: Existing config.json files work without modification
+- **Progressive Enhancement**: New sections use default content if not configured
+- **Optional Sections**: Sections without content are automatically populated with defaults
+
+### Image System
+- **Unsplash Integration**: Uses image keywords to generate placeholder images
+- **Fallback Support**: ImageWithFallback component handles loading failures
+- **Format**: `https://images.unsplash.com/{width}x{height}/?{keywords}`
+
 ## Development Notes
 - Hot Module Replacement (HMR) is configured and working
 - ESLint enforces React Hooks rules and React Refresh patterns
 - Build process includes both TypeScript compilation and Vite bundling
 - shadcn/ui components are pre-styled but customizable via props and CSS variables
 - next-themes is installed and configured for theme support
+- **Multi-section Architecture**: Organized into modular section components for maintainability
+- **Responsive Design**: All sections optimized for mobile-first responsive design
