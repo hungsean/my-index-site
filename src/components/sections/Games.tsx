@@ -1,7 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { ImageWithFallback } from '../ImageWithFallback'
 import type { SiteConfig } from '@/types/config'
+import { useState } from 'react'
 
 interface GamesProps {
   config: SiteConfig
@@ -21,6 +23,7 @@ interface ExtendedConfig extends SiteConfig {
 
 export function Games({ config }: GamesProps) {
   const extendedConfig = config as ExtendedConfig
+  const [showAll, setShowAll] = useState(false)
   
   // 預設遊戲，如果配置檔案沒有則使用這些
   const defaultGames = [
@@ -55,10 +58,44 @@ export function Games({ config }: GamesProps) {
       genre: "Roguelike",
       platform: "PC / Switch",
       status: "已完成"
+    },
+    {
+      title: "異域神劇",
+      description: "太空歌劇風格的 RPG，独特的星球探索體驗",
+      image: "honkai star rail game",
+      genre: "RPG",
+      platform: "PC / Mobile",
+      status: "正在遊玩"
+    },
+    {
+      title: "隻之呼吸",
+      description: "經典的開放世界冒險遊戲，充滿驚奇和情感",
+      image: "breath of the wild game",
+      genre: "Adventure",
+      platform: "Nintendo Switch",
+      status: "已完成"
+    },
+    {
+      title: "美妙世界",
+      description: "經典的生存建造遊戲，無限的創造可能",
+      image: "minecraft game",
+      genre: "Sandbox",
+      platform: "PC / Mobile",
+      status: "長期遊玩"
+    },
+    {
+      title: "幻塔幻想",
+      description: "日式 RPG 的經典作品，迷人的音樂和劇情",
+      image: "final fantasy game",
+      genre: "RPG",
+      platform: "PC / PlayStation",
+      status: "遊玩中"
     }
   ]
 
   const games = extendedConfig.games || defaultGames
+  const displayGames = showAll ? games : games.slice(0, 4)
+  const hasMoreGames = games.length > 4
 
   // 如果沒有遊戲要顯示，就不渲染這個節區
   if (!games.length) return null
@@ -74,7 +111,7 @@ export function Games({ config }: GamesProps) {
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {games.map((game, index) => (
+          {displayGames.map((game, index) => (
             <Card key={index} className="group hover:shadow-lg transition-shadow">
               <div className="aspect-[3/4] overflow-hidden rounded-t-lg">
                 <ImageWithFallback
@@ -110,6 +147,19 @@ export function Games({ config }: GamesProps) {
             </Card>
           ))}
         </div>
+        
+        {hasMoreGames && (
+          <div className="text-center mt-12">
+            <Button 
+              variant="outline" 
+              size="lg"
+              onClick={() => setShowAll(!showAll)}
+              className="px-8"
+            >
+              {showAll ? '顯示較少' : '查看更多遊戲'}
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   )

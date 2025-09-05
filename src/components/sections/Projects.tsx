@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { BsGithub, BsBoxArrowUpRight } from 'react-icons/bs'
 import { ImageWithFallback } from '../ImageWithFallback'
 import type { SiteConfig } from '@/types/config'
+import { useState } from 'react'
 
 interface ProjectsProps {
   config: SiteConfig
@@ -23,6 +24,7 @@ interface ExtendedConfig extends SiteConfig {
 
 export function Projects({ config }: ProjectsProps) {
   const extendedConfig = config as ExtendedConfig
+  const [showAll, setShowAll] = useState(false)
   
   // 預設專案，如果配置檔案沒有則使用這些
   const defaultProjects = [
@@ -49,10 +51,36 @@ export function Projects({ config }: ProjectsProps) {
       technologies: ["React", "Tailwind CSS", "Weather API"],
       githubUrl: "#",
       liveUrl: "#"
+    },
+    {
+      title: "社交媒體儀表板",
+      description: "統一管理多個社交媒體平台的分析和發佈工具",
+      image: "social media dashboard",
+      technologies: ["React", "Chart.js", "REST API", "OAuth"],
+      githubUrl: "#",
+      liveUrl: "#"
+    },
+    {
+      title: "線上學習平台",
+      description: "互動式的線上學習系統，支援影片課程和即時測驗",
+      image: "online learning platform",
+      technologies: ["Vue.js", "Express", "MySQL", "WebRTC"],
+      githubUrl: "#",
+      liveUrl: "#"
+    },
+    {
+      title: "投資組合追蹤器",
+      description: "即時追蹤股票和加密貨幣投資組合的分析工具",
+      image: "investment portfolio tracker",
+      technologies: ["React", "D3.js", "Firebase", "Financial API"],
+      githubUrl: "#",
+      liveUrl: "#"
     }
   ]
 
   const projects = extendedConfig.projects || defaultProjects
+  const displayProjects = showAll ? projects : projects.slice(0, 3)
+  const hasMoreProjects = projects.length > 3
 
   // 如果沒有專案要顯示，就不渲染這個節區
   if (!projects.length) return null
@@ -68,7 +96,7 @@ export function Projects({ config }: ProjectsProps) {
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
+          {displayProjects.map((project, index) => (
             <Card key={index} className="group hover:shadow-lg transition-shadow">
               <div className="aspect-video overflow-hidden rounded-t-lg">
                 <ImageWithFallback
@@ -111,6 +139,19 @@ export function Projects({ config }: ProjectsProps) {
             </Card>
           ))}
         </div>
+        
+        {hasMoreProjects && (
+          <div className="text-center mt-12">
+            <Button 
+              variant="outline" 
+              size="lg"
+              onClick={() => setShowAll(!showAll)}
+              className="px-8"
+            >
+              {showAll ? '顯示較少' : '查看更多專案'}
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   )
