@@ -36,16 +36,16 @@ export function About({ config }: AboutProps) {
   const skills = extendedConfig.about?.skills || defaultSkills
 
   return (
-    <section id="about" className="py-20 px-4">
+    <section id="about" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl mb-4">關於我</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl mb-4">關於我</h2>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             熱愛技術創新和問題解決的開發者
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 items-center">
           <Card>
             <CardHeader>
               <CardTitle>我的故事</CardTitle>

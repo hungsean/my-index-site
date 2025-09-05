@@ -17,16 +17,16 @@ export function Contact({ config }: ContactProps) {
   )
 
   return (
-    <section id="contact" className="py-20 px-4 bg-muted/20">
+    <section id="contact" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-muted/20">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl mb-4">聯絡我</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl mb-4">聯絡我</h2>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             歡迎與我交流技術、合作機會或單純聊聊
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {/* 電子郵件 */}
           <Card className="text-center hover:shadow-lg transition-shadow">
             <CardHeader>

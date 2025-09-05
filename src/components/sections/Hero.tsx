@@ -88,12 +88,12 @@ export function Hero({ config }: HeroProps) {
 
   return (
     <>
-      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/20 px-4">
+      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
             {/* 頭像區域 */}
             <div className="mb-6 flex justify-center">
-              <Avatar className="w-32 h-32 ring-4 ring-primary/20">
+              <Avatar className="w-24 h-24 sm:w-28 md:w-32 sm:h-28 md:h-32 ring-4 ring-primary/20">
                 <AvatarImage 
                   src={config.profile.avatar.src} 
                   alt={config.profile.avatar.alt} 
@@ -106,16 +106,16 @@ export function Hero({ config }: HeroProps) {
             </div>
             
             {/* 名稱和介紹 */}
-            <h1 className="text-5xl md:text-6xl mb-4 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent font-bold">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent font-bold">
               你好，我是 {config.profile.name}
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto font-medium">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto font-medium">
               {config.profile.interests}
             </p>
           </div>
 
           {/* 社交媒體按鈕組 - 橫向排列 */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-8">
             {config.socialLinks.map((social) => {
               const IconComponent = iconMap[social.icon.toLowerCase() as keyof typeof iconMap] || iconMap[social.icon as keyof typeof iconMap] || BsGlobe
               
@@ -124,8 +124,8 @@ export function Hero({ config }: HeroProps) {
                   <Button
                     key={social.name}
                     variant="outline"
-                    size="lg"
-                    className="hover:scale-105 transition-transform backdrop-blur-sm"
+                    size="sm"
+                    className="hover:scale-105 transition-transform backdrop-blur-sm text-xs sm:text-sm"
                     asChild
                   >
                     <a
@@ -144,8 +144,8 @@ export function Hero({ config }: HeroProps) {
                   <Button
                     key={social.name}
                     variant="outline"
-                    size="lg"
-                    className="hover:scale-105 transition-transform backdrop-blur-sm"
+                    size="sm"
+                    className="hover:scale-105 transition-transform backdrop-blur-sm text-xs sm:text-sm"
                     onClick={() => handleSocialClick(social)}
                   >
                     <IconComponent className="h-5 w-5 flex-shrink-0 mr-2" />

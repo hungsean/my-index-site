@@ -86,16 +86,16 @@ export function Projects({ config }: ProjectsProps) {
   if (!projects.length) return null
 
   return (
-    <section id="projects" className="py-20 px-4 bg-muted/20">
+    <section id="projects" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-muted/20">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl mb-4">我的專案</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl mb-4">我的專案</h2>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             一些我參與開發和負責的專案作品
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {displayProjects.map((project, index) => (
             <Card key={index} className="group hover:shadow-lg transition-shadow">
               <div className="aspect-video overflow-hidden rounded-t-lg">
