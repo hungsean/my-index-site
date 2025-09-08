@@ -10,20 +10,8 @@ interface ProjectsProps {
   config: SiteConfig
 }
 
-// 擴展配置類型以包含 projects 資訊
-interface ExtendedConfig extends SiteConfig {
-  projects?: Array<{
-    title: string
-    description: string
-    image: string
-    technologies: string[]
-    githubUrl?: string
-    liveUrl?: string
-  }>
-}
 
 export function Projects({ config }: ProjectsProps) {
-  const extendedConfig = config as ExtendedConfig
   const [showAll, setShowAll] = useState(false)
   
   // 預設專案，如果配置檔案沒有則使用這些
@@ -31,7 +19,7 @@ export function Projects({ config }: ProjectsProps) {
     {
       title: "電商網站平台",
       description: "完整的電商解決方案，包含購物車、支付系統和管理後台",
-      image: "ecommerce platform",
+      image_url: "https://images.unsplash.com/800x600/?ecommerce+platform",
       technologies: ["React", "Node.js", "MongoDB", "Stripe"],
       githubUrl: "#",
       liveUrl: "#"
@@ -39,7 +27,7 @@ export function Projects({ config }: ProjectsProps) {
     {
       title: "任務管理應用",
       description: "團隊協作的任務管理工具，支援即時更新和通知功能",
-      image: "task management app",
+      image_url: "https://images.unsplash.com/800x600/?task+management+app",
       technologies: ["Next.js", "TypeScript", "PostgreSQL", "Socket.io"],
       githubUrl: "#",
       liveUrl: "#"
@@ -47,7 +35,7 @@ export function Projects({ config }: ProjectsProps) {
     {
       title: "天氣預報應用",
       description: "美觀的天氣預報應用，提供詳細的氣象資訊和預測",
-      image: "weather app",
+      image_url: "https://images.unsplash.com/800x600/?weather+app",
       technologies: ["React", "Tailwind CSS", "Weather API"],
       githubUrl: "#",
       liveUrl: "#"
@@ -55,7 +43,7 @@ export function Projects({ config }: ProjectsProps) {
     {
       title: "社交媒體儀表板",
       description: "統一管理多個社交媒體平台的分析和發佈工具",
-      image: "social media dashboard",
+      image_url: "https://images.unsplash.com/800x600/?social+media+dashboard",
       technologies: ["React", "Chart.js", "REST API", "OAuth"],
       githubUrl: "#",
       liveUrl: "#"
@@ -63,7 +51,7 @@ export function Projects({ config }: ProjectsProps) {
     {
       title: "線上學習平台",
       description: "互動式的線上學習系統，支援影片課程和即時測驗",
-      image: "online learning platform",
+      image_url: "https://images.unsplash.com/800x600/?online+learning+platform",
       technologies: ["Vue.js", "Express", "MySQL", "WebRTC"],
       githubUrl: "#",
       liveUrl: "#"
@@ -71,14 +59,14 @@ export function Projects({ config }: ProjectsProps) {
     {
       title: "投資組合追蹤器",
       description: "即時追蹤股票和加密貨幣投資組合的分析工具",
-      image: "investment portfolio tracker",
+      image_url: "https://images.unsplash.com/800x600/?investment+portfolio+tracker",
       technologies: ["React", "D3.js", "Firebase", "Financial API"],
       githubUrl: "#",
       liveUrl: "#"
     }
   ]
 
-  const projects = extendedConfig.projects || defaultProjects
+  const projects = config.projects || defaultProjects
   const displayProjects = showAll ? projects : projects.slice(0, 3)
   const hasMoreProjects = projects.length > 3
 
@@ -100,7 +88,7 @@ export function Projects({ config }: ProjectsProps) {
             <Card key={index} className="group hover:shadow-lg transition-shadow">
               <div className="aspect-video overflow-hidden rounded-t-lg">
                 <ImageWithFallback
-                  src={`https://images.unsplash.com/800x600/?${project.image.replace(' ', '+')}`}
+                  src={project.image_url}
                   alt={project.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />

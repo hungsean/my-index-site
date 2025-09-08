@@ -9,20 +9,8 @@ interface GamesProps {
   config: SiteConfig
 }
 
-// 擴展配置類型以包含 games 資訊
-interface ExtendedConfig extends SiteConfig {
-  games?: Array<{
-    title: string
-    description: string
-    image: string
-    genre: string
-    platform: string
-    status: string
-  }>
-}
 
 export function Games({ config }: GamesProps) {
-  const extendedConfig = config as ExtendedConfig
   const [showAll, setShowAll] = useState(false)
   
   // 預設遊戲，如果配置檔案沒有則使用這些
@@ -30,7 +18,7 @@ export function Games({ config }: GamesProps) {
     {
       title: "原神",
       description: "開放世界冒險遊戲，美麗的世界觀和豐富的劇情",
-      image: "genshin impact game",
+      image_url: "https://images.unsplash.com/800x600/?genshin+impact+game",
       genre: "RPG",
       platform: "PC / Mobile",
       status: "正在遊玩"
@@ -38,7 +26,7 @@ export function Games({ config }: GamesProps) {
     {
       title: "英雄聯盟",
       description: "經典的 MOBA 遊戲，與朋友一起競技對戰",
-      image: "league of legends game",
+      image_url: "https://images.unsplash.com/800x600/?league+of+legends+game",
       genre: "MOBA",
       platform: "PC",
       status: "長期遊玩"
@@ -46,7 +34,7 @@ export function Games({ config }: GamesProps) {
     {
       title: "薩爾達傳說：王國之淚",
       description: "創意無限的開放世界探索遊戲",
-      image: "zelda tears kingdom",
+      image_url: "https://images.unsplash.com/800x600/?zelda+tears+kingdom",
       genre: "Adventure",
       platform: "Nintendo Switch",
       status: "已完成"
@@ -54,7 +42,7 @@ export function Games({ config }: GamesProps) {
     {
       title: "黑帝斯",
       description: "出色的 Roguelike 遊戲，完美的遊戲機制設計",
-      image: "hades game",
+      image_url: "https://images.unsplash.com/800x600/?hades+game",
       genre: "Roguelike",
       platform: "PC / Switch",
       status: "已完成"
@@ -62,7 +50,7 @@ export function Games({ config }: GamesProps) {
     {
       title: "異域神劇",
       description: "太空歌劇風格的 RPG，独特的星球探索體驗",
-      image: "honkai star rail game",
+      image_url: "https://images.unsplash.com/800x600/?honkai+star+rail+game",
       genre: "RPG",
       platform: "PC / Mobile",
       status: "正在遊玩"
@@ -70,7 +58,7 @@ export function Games({ config }: GamesProps) {
     {
       title: "隻之呼吸",
       description: "經典的開放世界冒險遊戲，充滿驚奇和情感",
-      image: "breath of the wild game",
+      image_url: "https://images.unsplash.com/800x600/?breath+of+the+wild+game",
       genre: "Adventure",
       platform: "Nintendo Switch",
       status: "已完成"
@@ -78,7 +66,7 @@ export function Games({ config }: GamesProps) {
     {
       title: "美妙世界",
       description: "經典的生存建造遊戲，無限的創造可能",
-      image: "minecraft game",
+      image_url: "https://images.unsplash.com/800x600/?minecraft+game",
       genre: "Sandbox",
       platform: "PC / Mobile",
       status: "長期遊玩"
@@ -86,14 +74,14 @@ export function Games({ config }: GamesProps) {
     {
       title: "幻塔幻想",
       description: "日式 RPG 的經典作品，迷人的音樂和劇情",
-      image: "final fantasy game",
+      image_url: "https://images.unsplash.com/800x600/?final+fantasy+game",
       genre: "RPG",
       platform: "PC / PlayStation",
       status: "遊玩中"
     }
   ]
 
-  const games = extendedConfig.games || defaultGames
+  const games = config.games || defaultGames
   const displayGames = showAll ? games : games.slice(0, 4)
   const hasMoreGames = games.length > 4
 
@@ -113,9 +101,9 @@ export function Games({ config }: GamesProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {displayGames.map((game, index) => (
             <Card key={index} className="group hover:shadow-lg transition-shadow">
-              <div className="aspect-[3/4] overflow-hidden rounded-t-lg">
+              <div className="aspect-video overflow-hidden rounded-t-lg">
                 <ImageWithFallback
-                  src={`https://images.unsplash.com/600x800/?${game.image.replace(' ', '+')}`}
+                  src={game.image_url}
                   alt={game.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />

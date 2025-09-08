@@ -75,5 +75,72 @@
       "color": "hover:text-orange-400",
       "type": "text"
     }
+  ],
+  "about": {
+    "story": "我就是我，怎了？",
+    "skills": [
+      "React", "TypeScript", "Node.js", "Python", "Next.js", 
+      "Tailwind CSS", "MongoDB", "PostgreSQL", "AWS", "Docker",
+      "Vue.js", "Express", "NestJS", "GraphQL", "Redis"
+    ]
+  },
+  "projects": [
+    {
+      "title": "個人網站重構",
+      "description": "將原本的 linktree 風格網站升級為完整的個人作品集，使用 React + TypeScript + Tailwind CSS",
+      "image_url": "https://images.unsplash.com/600x400/?personal+website+development",
+      "technologies": ["React", "TypeScript", "Tailwind CSS", "Vite", "shadcn/ui"],
+      "githubUrl": "https://github.com/hungsean/my-index-site",
+      "liveUrl": "https://senen.dev"
+    },
+    {
+      "title": "Discord 機器人",
+      "description": "多功能 Discord 機器人，提供音樂播放、遊戲統計、聊天娛樂等功能",
+      "image_url": "https://images.unsplash.com/600x400/?discord+bot+development",
+      "technologies": ["Node.js", "Discord.js", "MongoDB", "Docker"],
+      "githubUrl": "#"
+    },
+    {
+      "title": "遊戲數據分析工具",
+      "description": "分析遊戲數據並生成統計報告的 Web 應用程式",
+      "image_url": "https://images.unsplash.com/600x400/?game+analytics+dashboard",
+      "technologies": ["Next.js", "TypeScript", "Chart.js", "PostgreSQL"],
+      "githubUrl": "#",
+      "liveUrl": "#"
+    }
+  ],
+  "games": [
+    {
+      "title": "碧藍航線",
+      "description": "理論上是個彈幕射擊的艦娘遊戲，但本體是肝船和賣瑟瑟的造型。",
+      "image_url": "https://images.unsplash.com/800x600/?azur+lane+game",
+      "genre": "RPG",
+      "platform": "Mobile",
+      "status": "正在遊玩"
+    },
+    {
+      "title": "英雄聯盟",
+      "description": "經典的 MOBA 遊戲，與朋友一起競技對戰",
+      "image_url": "https://images.unsplash.com/800x600/?league+of+legends",
+      "genre": "MOBA", 
+      "platform": "PC",
+      "status": "長期遊玩"
+    },
+    {
+      "title": "薩爾達傳說：王國之淚",
+      "description": "創意無限的開放世界探索遊戲",
+      "image_url": "https://images.unsplash.com/800x600/?zelda+tears+of+the+kingdom",
+      "genre": "Adventure",
+      "platform": "Nintendo Switch",
+      "status": "已完成"
+    },
+    {
+      "title": "黑帝斯",
+      "description": "出色的 Roguelike 遊戲，完美的遊戲機制設計",
+      "image_url": "https://images.unsplash.com/800x600/?hades+game",
+      "genre": "Roguelike",
+      "platform": "PC / Switch", 
+      "status": "已完成"
+    }
   ]
 }
