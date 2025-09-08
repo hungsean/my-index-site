@@ -19,22 +19,22 @@ export interface Profile {
   }
 }
 
-export interface Project {
+// 統一的內容項目介面 (用於 projects 和 games)
+export interface ContentItem {
   title: string
   description: string
   image_url: string
-  technologies: string[]
-  githubUrl: string
-  liveUrl?: string
-}
-
-export interface Game {
-  title: string
-  description: string
-  image_url: string
-  genre: string
-  platform: string
-  status: string
+  tags?: Array<{
+    text: string
+    variant?: 'default' | 'secondary' | 'outline' | 'destructive'
+    style?: 'normal' | 'small'
+  }>
+  links?: Array<{
+    text: string
+    href: string
+    variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'link'
+    size?: 'default' | 'sm' | 'lg'
+  }>
 }
 
 export interface About {
@@ -46,6 +46,6 @@ export interface SiteConfig {
   profile: Profile
   socialLinks: SocialLink[]
   about?: About
-  projects?: Project[]
-  games?: Game[]
+  projects?: ContentItem[]
+  games?: ContentItem[]
 }

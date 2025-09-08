@@ -1,7 +1,5 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ImageWithFallback } from '../ImageWithFallback'
+import { ContentCard, type Tag, type Link } from '../ContentCard'
 import type { SiteConfig } from '@/types/config'
 import { useState } from 'react'
 
@@ -13,71 +11,53 @@ interface GamesProps {
 export function Games({ config }: GamesProps) {
   const [showAll, setShowAll] = useState(false)
   
-  // 預設遊戲，如果配置檔案沒有則使用這些
+  // 預設遊戲，如果配置檔案沒有則使用這些 (使用新的統一格式)
   const defaultGames = [
     {
       title: "原神",
       description: "開放世界冒險遊戲，美麗的世界觀和豐富的劇情",
       image_url: "https://images.unsplash.com/800x600/?genshin+impact+game",
-      genre: "RPG",
-      platform: "PC / Mobile",
-      status: "正在遊玩"
+      tags: [
+        { text: "RPG", variant: "secondary" },
+        { text: "PC / Mobile", variant: "outline" },
+        { text: "正在遊玩", variant: "default" }
+      ],
+      links: [
+        { text: "官方網站", href: "https://genshin.mihoyo.com/", variant: "outline" }
+      ]
     },
     {
       title: "英雄聯盟",
       description: "經典的 MOBA 遊戲，與朋友一起競技對戰",
       image_url: "https://images.unsplash.com/800x600/?league+of+legends+game",
-      genre: "MOBA",
-      platform: "PC",
-      status: "長期遊玩"
+      tags: [
+        { text: "MOBA", variant: "secondary" },
+        { text: "PC", variant: "outline" },
+        { text: "長期遊玩", variant: "secondary" }
+      ],
+      links: [
+        { text: "官方網站", href: "https://www.leagueoflegends.com/", variant: "outline" }
+      ]
     },
     {
       title: "薩爾達傳說：王國之淚",
       description: "創意無限的開放世界探索遊戲",
       image_url: "https://images.unsplash.com/800x600/?zelda+tears+kingdom",
-      genre: "Adventure",
-      platform: "Nintendo Switch",
-      status: "已完成"
+      tags: [
+        { text: "Adventure", variant: "secondary" },
+        { text: "Nintendo Switch", variant: "outline" },
+        { text: "已完成", variant: "secondary" }
+      ]
     },
     {
       title: "黑帝斯",
       description: "出色的 Roguelike 遊戲，完美的遊戲機制設計",
       image_url: "https://images.unsplash.com/800x600/?hades+game",
-      genre: "Roguelike",
-      platform: "PC / Switch",
-      status: "已完成"
-    },
-    {
-      title: "異域神劇",
-      description: "太空歌劇風格的 RPG，独特的星球探索體驗",
-      image_url: "https://images.unsplash.com/800x600/?honkai+star+rail+game",
-      genre: "RPG",
-      platform: "PC / Mobile",
-      status: "正在遊玩"
-    },
-    {
-      title: "隻之呼吸",
-      description: "經典的開放世界冒險遊戲，充滿驚奇和情感",
-      image_url: "https://images.unsplash.com/800x600/?breath+of+the+wild+game",
-      genre: "Adventure",
-      platform: "Nintendo Switch",
-      status: "已完成"
-    },
-    {
-      title: "美妙世界",
-      description: "經典的生存建造遊戲，無限的創造可能",
-      image_url: "https://images.unsplash.com/800x600/?minecraft+game",
-      genre: "Sandbox",
-      platform: "PC / Mobile",
-      status: "長期遊玩"
-    },
-    {
-      title: "幻塔幻想",
-      description: "日式 RPG 的經典作品，迷人的音樂和劇情",
-      image_url: "https://images.unsplash.com/800x600/?final+fantasy+game",
-      genre: "RPG",
-      platform: "PC / PlayStation",
-      status: "遊玩中"
+      tags: [
+        { text: "Roguelike", variant: "secondary" },
+        { text: "PC / Switch", variant: "outline" },
+        { text: "已完成", variant: "secondary" }
+      ]
     }
   ]
 
@@ -99,41 +79,32 @@ export function Games({ config }: GamesProps) {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {displayGames.map((game, index) => (
-            <Card key={index} className="group hover:shadow-lg transition-shadow">
-              <div className="aspect-video overflow-hidden rounded-t-lg">
-                <ImageWithFallback
-                  src={game.image_url}
-                  alt={game.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">{game.title}</CardTitle>
-                <CardDescription className="text-sm line-clamp-2">
-                  {game.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="space-y-2">
-                  <div className="flex flex-wrap gap-1">
-                    <Badge variant="secondary" className="text-xs">
-                      {game.genre}
-                    </Badge>
-                    <Badge variant="outline" className="text-xs">
-                      {game.platform}
-                    </Badge>
-                  </div>
-                  <Badge 
-                    variant={game.status === "正在遊玩" ? "default" : "secondary"}
-                    className="text-xs"
-                  >
-                    {game.status}
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          {displayGames.map((game, index) => {
+            // 直接使用新格式的 tags 和 links
+            const contentCardTags: Tag[] = game.tags?.map((tag: any) => ({
+              content: tag.text,
+              variant: tag.variant || 'outline',
+              style: tag.style || 'small'
+            })) || []
+
+            const contentCardLinks: Link[] = game.links?.map((link: any) => ({
+              content: link.text,
+              href: link.href,
+              variant: link.variant || 'outline',
+              size: link.size || 'sm'
+            })) || []
+
+            return (
+              <ContentCard
+                key={index}
+                image_url={game.image_url}
+                title={game.title}
+                description={game.description}
+                tags={contentCardTags}
+                links={contentCardLinks}
+              />
+            )
+          })}
         </div>
         
         {hasMoreGames && (

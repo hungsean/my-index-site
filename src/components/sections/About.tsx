@@ -6,16 +6,9 @@ interface AboutProps {
   config: SiteConfig
 }
 
-// 擴展配置類型以包含 about 資訊（暫時用預設值）
-interface ExtendedConfig extends SiteConfig {
-  about?: {
-    story?: string
-    skills?: string[]
-  }
-}
+// About 元件現在直接使用 SiteConfig 中的 about 欄位
 
 export function About({ config }: AboutProps) {
-  const extendedConfig = config as ExtendedConfig
   
   // 預設內容，如果配置檔案沒有則使用這些
   const defaultStory = `我是一名充滿熱情的全端開發者，專注於創建優雅且實用的網路應用程式。
@@ -32,8 +25,8 @@ export function About({ config }: AboutProps) {
     "Tailwind CSS", "MongoDB", "PostgreSQL", "AWS", "Docker"
   ]
 
-  const story = extendedConfig.about?.story || defaultStory
-  const skills = extendedConfig.about?.skills || defaultSkills
+  const story = config.about?.story || defaultStory
+  const skills = config.about?.skills || defaultSkills
 
   return (
     <section id="about" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
