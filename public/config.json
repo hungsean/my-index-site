@@ -86,9 +86,36 @@
   },
   "projects": [
     {
-      "title": "個人網站重構",
-      "description": "將原本的 linktree 風格網站升級為完整的個人作品集，使用 React + TypeScript + Tailwind CSS",
-      "image_url": "https://images.unsplash.com/600x400/?personal+website+development",
+      "title": "Nori Web",
+      "description": "平台整合的Matrix Client，支援 SSR 和 Docker 部署",
+      "tags": [
+        { "text": "React", "variant": "outline" },
+        { "text": "TypeScript", "variant": "outline" },
+        { "text": "Tailwind CSS", "variant": "outline" },
+        { "text": "Vite", "variant": "outline" },
+        { "text": "Docker", "variant": "outline" }
+      ],
+      "links": [
+        { "text": "程式碼", "href": "https://github.com/message-exp/nori-web", "variant": "outline" }
+      ]
+    },
+    {
+      "title": "Random Picker",
+      "description": "React + TypeScript 開發的隨機選擇器工具",
+      "tags": [
+        { "text": "React", "variant": "outline" },
+        { "text": "TypeScript", "variant": "outline" },
+        { "text": "Vite", "variant": "outline" },
+        { "text": "ESLint", "variant": "outline" }
+      ],
+      "links": [
+        { "text": "程式碼", "href": "https://github.com/hungsean/random-picker", "variant": "outline" },
+        { "text": "查看", "href": "https://random.senen.dev", "variant": "default" }
+      ]
+    },
+    {
+      "title": "My Index Site",
+      "description": "就是個我的個人網站，包含我的一切。",
       "tags": [
         { "text": "React", "variant": "outline" },
         { "text": "TypeScript", "variant": "outline" },
@@ -97,37 +124,8 @@
         { "text": "shadcn/ui", "variant": "outline" }
       ],
       "links": [
-        { "text": "代碼", "href": "https://github.com/hungsean/my-index-site", "variant": "outline" },
-        { "text": "查看", "href": "https://senen.dev", "variant": "default" }
-      ]
-    },
-    {
-      "title": "Discord 機器人",
-      "description": "多功能 Discord 機器人，提供音樂播放、遊戲統計、聊天娛樂等功能",
-      "image_url": "https://images.unsplash.com/600x400/?discord+bot+development",
-      "tags": [
-        { "text": "Node.js", "variant": "outline" },
-        { "text": "Discord.js", "variant": "outline" },
-        { "text": "MongoDB", "variant": "outline" },
-        { "text": "Docker", "variant": "outline" }
-      ],
-      "links": [
-        { "text": "代碼", "href": "#", "variant": "outline" }
-      ]
-    },
-    {
-      "title": "遊戲數據分析工具",
-      "description": "分析遊戲數據並生成統計報告的 Web 應用程式",
-      "image_url": "https://images.unsplash.com/600x400/?game+analytics+dashboard",
-      "tags": [
-        { "text": "Next.js", "variant": "outline" },
-        { "text": "TypeScript", "variant": "outline" },
-        { "text": "Chart.js", "variant": "outline" },
-        { "text": "PostgreSQL", "variant": "outline" }
-      ],
-      "links": [
-        { "text": "代碼", "href": "#", "variant": "outline" },
-        { "text": "查看", "href": "#", "variant": "default" }
+        { "text": "程式碼", "href": "https://github.com/hungsean/my-index-site", "variant": "outline" },
+        { "text": "查看", "href": "https://www.senen.dev", "variant": "default" }
       ]
     }
   ],

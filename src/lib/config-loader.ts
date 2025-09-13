@@ -273,11 +273,11 @@ function validateContentItems(items: any, type: 'projects' | 'games'): { items?:
       return
     }
 
-    if (!item.title || !item.description || !item.image_url) {
-      errors.push({ 
-        field: `${type}[${index}]`, 
-        message: `${type === 'projects' ? '專案' : '遊戲'}缺少必要欄位 (title, description, image_url)`, 
-        severity: 'error' 
+    if (!item.title || !item.description) {
+      errors.push({
+        field: `${type}[${index}]`,
+        message: `${type === 'projects' ? '專案' : '遊戲'}缺少必要欄位 (title, description)`,
+        severity: 'error'
       })
       return
     }
@@ -294,7 +294,7 @@ function validateContentItems(items: any, type: 'projects' | 'games'): { items?:
     const validatedItem: ContentItem = {
       title: item.title,
       description: item.description,
-      image_url: item.image_url,
+      ...(item.image_url && { image_url: item.image_url }),
       tags: item.tags ? item.tags.map((tag: any) => ({
         text: tag.text,
         variant: tag.variant,

@@ -23,7 +23,7 @@ export interface Profile {
 export interface ContentItem {
   title: string
   description: string
-  image_url: string
+  image_url?: string
   tags?: Array<{
     text: string
     variant?: 'default' | 'secondary' | 'outline' | 'destructive'
