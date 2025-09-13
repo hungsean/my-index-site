@@ -135,53 +135,55 @@
     {
       "title": "碧藍航線",
       "description": "理論上是個彈幕射擊的艦娘遊戲，但本體是肝船和賣瑟瑟的造型。",
-      "image_url": "/Screenshot_20250908-105643_edit.png",
+      "image_url": "https://img.senen.dev/azuelane_laffey.png",
       "tags": [
         { "text": "RPG", "variant": "secondary" },
         { "text": "Mobile", "variant": "outline" },
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "text": "官方網站", "href": "https://www.azurlane.jp/", "variant": "outline" }
+        { "text": "官方網站", "href": "https://www.azurlane.tw", "variant": "outline" }
       ]
     },
     {
-      "title": "英雄聯盟",
-      "description": "經典的 MOBA 遊戲，與朋友一起競技對戰",
-      "image_url": "https://images.unsplash.com/800x600/?league+of+legends",
+      "title": "学園アイドルマスター",
+      "description": "養偶像遊戲，順帶一提花海咲季我推！",
+      "image_url": "https://img.senen.dev/gakumas_hanami_saki.png",
       "tags": [
-        { "text": "MOBA", "variant": "secondary" },
-        { "text": "PC", "variant": "outline" },
-        { "text": "長期遊玩", "variant": "secondary" }
+        { "text": "RPG", "variant": "secondary" },
+        { "text": "DMM/Mobile", "variant": "outline" },
+        { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "text": "官方網站", "href": "https://www.leagueoflegends.com/", "variant": "outline" }
+        { "text": "官方網站", "href": "https://gakuen.idolmaster-official.jp", "variant": "outline" }
       ]
     },
     {
-      "title": "薩爾達傳說：王國之淚",
-      "description": "創意無限的開放世界探索遊戲",
-      "image_url": "https://images.unsplash.com/800x600/?zelda+tears+of+the+kingdom",
+      "title": "劍星",
+      "description": "動作冒險兼換裝遊戲",
+      "image_url": "https://img.senen.dev/stellar_blade.jpg",
       "tags": [
-        { "text": "Adventure", "variant": "secondary" },
-        { "text": "Nintendo Switch", "variant": "outline" },
+        { "text": "Action", "variant": "secondary" },
+        { "text": "PS5 / PC", "variant": "outline" },
+        { "text": "正在遊玩", "variant": "outline" }
+      ],
+      "links": [
+        { "text": "Steam", "href": "https://store.steampowered.com/app/3489700/_/", "variant": "outline" },
+        { "text": "PlayStation", "href": "https://www.playstation.com/en-us/games/stellar-blade/", "variant": "outline" }
+      ]
+    },
+    {
+      "title": "死亡擱淺",
+      "description": "小島秀夫的神，無需多言。",
+      "image_url": "https://img.senen.dev/death_stranding.jpg",
+      "tags": [
+        { "text": "Walking", "variant": "secondary" },
+        { "text": "PC / PS5", "variant": "outline" },
         { "text": "已完成", "variant": "secondary" }
       ],
       "links": [
-        { "text": "任天堂官網", "href": "https://www.nintendo.com/us/store/products/the-legend-of-zelda-tears-of-the-kingdom-switch/", "variant": "outline" }
-      ]
-    },
-    {
-      "title": "黑帝斯",
-      "description": "出色的 Roguelike 遊戲，完美的遊戲機制設計",
-      "image_url": "https://images.unsplash.com/800x600/?hades+game",
-      "tags": [
-        { "text": "Roguelike", "variant": "secondary" },
-        { "text": "PC / Switch", "variant": "outline" },
-        { "text": "已完成", "variant": "secondary" }
-      ],
-      "links": [
-        { "text": "Steam", "href": "https://store.steampowered.com/app/1145360/Hades/", "variant": "outline" }
+        { "text": "Steam", "href": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/", "variant": "outline" },
+        { "text": "官方網站", "href": "https://deathstrandingpc.505games.com/zh-hant/", "variant": "outline" }
       ]
     }
   ]

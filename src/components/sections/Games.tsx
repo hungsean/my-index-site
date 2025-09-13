@@ -81,17 +81,17 @@ export function Games({ config }: GamesProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {displayGames.map((game, index) => {
             // 直接使用新格式的 tags 和 links
-            const contentCardTags: Tag[] = game.tags?.map((tag: any) => ({
+            const contentCardTags: Tag[] = game.tags?.map((tag: { text: string; variant?: string; style?: string }) => ({
               content: tag.text,
-              variant: tag.variant || 'outline',
-              style: tag.style || 'small'
+              variant: (tag.variant as Tag['variant']) || 'outline',
+              style: (tag.style as Tag['style']) || 'small'
             })) || []
 
-            const contentCardLinks: Link[] = game.links?.map((link: any) => ({
+            const contentCardLinks: Link[] = game.links?.map((link: { text: string; href: string; variant?: string; size?: string }) => ({
               content: link.text,
               href: link.href,
-              variant: link.variant || 'outline',
-              size: link.size || 'sm'
+              variant: (link.variant as Link['variant']) || 'outline',
+              size: (link.size as Link['size']) || 'sm'
             })) || []
 
             return (

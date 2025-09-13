@@ -79,17 +79,17 @@ export function Projects({ config }: ProjectsProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {displayProjects.map((project, index) => {
             // 直接使用新格式的 tags 和 links
-            const contentCardTags: Tag[] = project.tags?.map((tag: any) => ({
+            const contentCardTags: Tag[] = project.tags?.map((tag: { text: string; variant?: string; style?: string }) => ({
               content: tag.text,
-              variant: tag.variant || 'outline',
-              style: tag.style || 'small'
+              variant: (tag.variant as Tag['variant']) || 'outline',
+              style: (tag.style as Tag['style']) || 'small'
             })) || []
 
-            const contentCardLinks: Link[] = project.links?.map((link: any) => ({
+            const contentCardLinks: Link[] = project.links?.map((link: { text: string; href: string; variant?: string; size?: string }) => ({
               content: link.text,
               href: link.href,
-              variant: link.variant || 'outline',
-              size: link.size || 'sm'
+              variant: (link.variant as Link['variant']) || 'outline',
+              size: (link.size as Link['size']) || 'sm'
             })) || []
 
             return (
