@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { BsEnvelope, BsDiscord, BsCupHot } from 'react-icons/bs'
+import { BsEnvelope, BsDiscord, BsInstagram } from 'react-icons/bs'
+import { toast } from 'sonner'
 import type { SiteConfig } from '@/types/config'
 
 interface ContactProps {
@@ -8,12 +9,15 @@ interface ContactProps {
 }
 
 export function Contact({ config }: ContactProps) {
-  // 從 socialLinks 中找到 email 和 discord
-  const emailLink = config.socialLinks.find(link => 
+  // 從 socialLinks 中找到 email、discord 和 instagram
+  const emailLink = config.socialLinks.find(link =>
     link.icon.toLowerCase() === 'email' || link.icon.toLowerCase() === 'mail'
   )
-  const discordLink = config.socialLinks.find(link => 
+  const discordLink = config.socialLinks.find(link =>
     link.icon.toLowerCase() === 'discord'
+  )
+  const instagramLinks = config.socialLinks.filter(link =>
+    link.icon.toLowerCase() === 'instagram'
   )
 
   return (
@@ -28,8 +32,8 @@ export function Contact({ config }: ContactProps) {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {/* 電子郵件 */}
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
+          <Card className="text-center hover:shadow-lg transition-shadow flex flex-col justify-center">
+            <CardHeader className="flex-shrink-0">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                 <BsEnvelope className="w-6 h-6 text-primary" />
               </div>
@@ -44,10 +48,10 @@ export function Contact({ config }: ContactProps) {
               </Button>
             </CardContent>
           </Card>
-          
+
           {/* Discord */}
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
+          <Card className="text-center hover:shadow-lg transition-shadow flex flex-col justify-center">
+            <CardHeader className="flex-shrink-0">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                 <BsDiscord className="w-6 h-6 text-primary" />
               </div>
@@ -55,12 +59,22 @@ export function Contact({ config }: ContactProps) {
               <CardDescription>透過 Discord 聊天</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="w-full"
-                onClick={() => {
+                onClick={async () => {
                   if (discordLink && discordLink.type === 'copy') {
-                    navigator.clipboard.writeText(discordLink.url)
+                    try {
+                      await navigator.clipboard.writeText(discordLink.url)
+                      toast.success('Discord ID 已複製到剪貼板！', {
+                        description: `已複製: ${discordLink.url}`
+                      })
+                    } catch (err) {
+                      toast.error('複製失敗', {
+                        description: '請手動複製 Discord ID'
+                      });
+                      console.error(err);
+                    }
                   }
                 }}
               >
@@ -68,22 +82,30 @@ export function Contact({ config }: ContactProps) {
               </Button>
             </CardContent>
           </Card>
-          
-          {/* 面對面交流 */}
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
+
+          {/* Instagram 日常分享 */}
+          <Card className="text-center hover:shadow-lg transition-shadow flex flex-col justify-center">
+            <CardHeader className="flex-shrink-0">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <BsCupHot className="w-6 h-6 text-primary" />
+                <BsInstagram className="w-6 h-6 text-primary" />
               </div>
-              <CardTitle>面對面交流</CardTitle>
-              <CardDescription>台北地區歡迎約咖啡聊天</CardDescription>
+              <CardTitle>日常生活</CardTitle>
+              <CardDescription>了解我的日常與興趣愛好</CardDescription>
             </CardHeader>
-            <CardContent>
-              <Button variant="outline" asChild className="w-full">
-                <a href={emailLink ? `mailto:${emailLink.url}?subject=咖啡聊天邀請` : 'mailto:your.email@example.com?subject=咖啡聊天邀請'}>
-                  約個咖啡
-                </a>
-              </Button>
+            <CardContent className="flex-grow flex flex-col items-center space-y-2">
+              {instagramLinks.length > 0 ? (
+                instagramLinks.map((link, index) => (
+                  <Button key={index} variant="outline" asChild className="w-full">
+                    <a href={link.url} target="_blank" rel="noopener noreferrer">
+                      {link.name}
+                    </a>
+                  </Button>
+                ))
+              ) : (
+                <Button variant="outline" className="w-full" disabled>
+                  Instagram 帳號
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>

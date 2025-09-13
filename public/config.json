@@ -77,11 +77,10 @@
     }
   ],
   "about": {
-    "story": "我就是我，怎了？",
+    "story": "就個資訊系學生兼打工人兼指揮官兼老師兼熾天使部隊間開拓者兼服裝搭配師兼偶像製作人兼月讀北車常客兼七七單推兼柚莓單推。",
     "skills": [
-      "React", "TypeScript", "Node.js", "Python", "Next.js", 
-      "Tailwind CSS", "MongoDB", "PostgreSQL", "AWS", "Docker",
-      "Vue.js", "Express", "NestJS", "GraphQL", "Redis"
+      "React", "TypeScript", "Python",
+      "Tailwind CSS", "Docker", "n8n", "app script"
     ]
   },
   "projects": [
