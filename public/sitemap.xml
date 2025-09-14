@@ -1,9 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- 主頁 - 最高優先級 -->
   <url>
     <loc>https://senen.dev/</loc>
-    <lastmod>2025-08-19</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2025-09-14</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://img.senen.dev/IMG_20240704_135615_512x512.jpg</image:loc>
+      <image:caption>千円的個人頭像</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg</image:loc>
+      <image:caption>網站背景圖片</image:caption>
+    </image:image>
+  </url>
+
+  <!-- 關於我頁面區塊 -->
+  <url>
+    <loc>https://senen.dev/#about</loc>
+    <lastmod>2025-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 專案展示區塊 -->
+  <url>
+    <loc>https://senen.dev/#projects</loc>
+    <lastmod>2025-09-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 遊戲區塊 -->
+  <url>
+    <loc>https://senen.dev/#games</loc>
+    <lastmod>2025-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://img.senen.dev/azuelane_laffey.png</image:loc>
+      <image:caption>碧藍航線 - 拉菲</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://img.senen.dev/gakumas_hanami_saki.png</image:loc>
+      <image:caption>学園アイドルマスター - 花海咲季</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://img.senen.dev/stellar_blade.jpg</image:loc>
+      <image:caption>劍星遊戲截圖</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://img.senen.dev/death_stranding.jpg</image:loc>
+      <image:caption>死亡擱淺遊戲截圖</image:caption>
+    </image:image>
+  </url>
+
+  <!-- 聯絡資訊區塊 -->
+  <url>
+    <loc>https://senen.dev/#contact</loc>
+    <lastmod>2025-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 外部專案連結 -->
+  <url>
+    <loc>https://random.senen.dev</loc>
+    <lastmod>2025-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

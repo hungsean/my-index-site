@@ -16,64 +16,172 @@
       "name": "GitHub",
       "icon": "github",
       "url": "https://github.com/hungsean",
-      "color": "hover:text-gray-800 dark:hover:text-gray-300",
+      "color": "text-gray-800 dark:text-gray-300",
       "type": "link"
     },
     {
       "name": "Twitter",
       "icon": "twitter",
       "url": "https://twitter.com/senen_3454",
-      "color": "hover:text-blue-400",
+      "color": "text-gray-800 dark:text-gray-300",
       "type": "link"
     },
     {
       "name": "Instagram(main)",
       "icon": "instagram",
       "url": "https://instagram.com/senen.3454",
-      "color": "hover:text-pink-400",
+      "color": "text-pink-400",
       "type": "link"
     },
     {
       "name": "Instagram(idol/maid)",
       "icon": "instagram",
       "url": "https://instagram.com/idol.maid.senen",
-      "color": "hover:text-pink-400",
+      "color": "text-pink-400",
       "type": "link"
     },
     {
       "name": "Threads(main)",
       "icon": "threads",
       "url": "https://www.threads.com/@senen.3454",
-      "color": "hover:text-slate-600 dark:hover:text-slate-300",
+      "color": "text-slate-600 dark:text-slate-300",
       "type": "link"
     },
     {
       "name": "Threads(idol/maid)",
       "icon": "threads",
       "url": "https://www.threads.com/@idol.maid.senen",
-      "color": "hover:text-slate-600 dark:hover:text-slate-300",
+      "color": "text-slate-600 dark:text-slate-300",
       "type": "link"
     },
     {
       "name": "Discord",
       "icon": "discord",
       "url": "senen_3454",
-      "color": "hover:text-blue-500",
+      "color": "text-blue-500",
       "type": "copy"
     },
     {
       "name": "Email",
       "icon": "email",
       "url": "senen.dev.3454@gmail.com",
-      "color": "hover:text-green-400",
+      "color": "text-green-400",
       "type": "copy"
     },
     {
       "name": "my website",
       "icon": "website",
       "url": "就是這個網站！",
-      "color": "hover:text-orange-400",
+      "color": "text-orange-400",
       "type": "text"
+    }
+  ],
+  "about": {
+    "story": "就個資訊系學生兼打工人兼指揮官兼老師兼熾天使部隊間開拓者兼服裝搭配師兼偶像製作人兼月讀北車常客兼七七單推兼柚莓單推。",
+    "skills": [
+      "React", "TypeScript", "Python",
+      "Tailwind CSS", "Docker", "n8n", "app script"
+    ]
+  },
+  "projects": [
+    {
+      "title": "Nori Web",
+      "description": "平台整合的Matrix Client，支援 SSR 和 Docker 部署",
+      "tags": [
+        { "text": "React", "variant": "outline" },
+        { "text": "TypeScript", "variant": "outline" },
+        { "text": "Tailwind CSS", "variant": "outline" },
+        { "text": "Vite", "variant": "outline" },
+        { "text": "Docker", "variant": "outline" }
+      ],
+      "links": [
+        { "text": "程式碼", "href": "https://github.com/message-exp/nori-web", "variant": "outline" }
+      ]
+    },
+    {
+      "title": "Random Picker",
+      "description": "React + TypeScript 開發的隨機選擇器工具",
+      "tags": [
+        { "text": "React", "variant": "outline" },
+        { "text": "TypeScript", "variant": "outline" },
+        { "text": "Vite", "variant": "outline" },
+        { "text": "ESLint", "variant": "outline" }
+      ],
+      "links": [
+        { "text": "程式碼", "href": "https://github.com/hungsean/random-picker", "variant": "outline" },
+        { "text": "查看", "href": "https://random.senen.dev", "variant": "default" }
+      ]
+    },
+    {
+      "title": "My Index Site",
+      "description": "就是個我的個人網站，包含我的一切。",
+      "tags": [
+        { "text": "React", "variant": "outline" },
+        { "text": "TypeScript", "variant": "outline" },
+        { "text": "Tailwind CSS", "variant": "outline" },
+        { "text": "Vite", "variant": "outline" },
+        { "text": "shadcn/ui", "variant": "outline" }
+      ],
+      "links": [
+        { "text": "程式碼", "href": "https://github.com/hungsean/my-index-site", "variant": "outline" },
+        { "text": "查看", "href": "https://www.senen.dev", "variant": "default" }
+      ]
+    }
+  ],
+  "games": [
+    {
+      "title": "碧藍航線",
+      "description": "理論上是個彈幕射擊的艦娘遊戲，但本體是肝船和賣瑟瑟的造型。",
+      "image_url": "https://img.senen.dev/azuelane_laffey.png",
+      "tags": [
+        { "text": "RPG", "variant": "secondary" },
+        { "text": "Mobile", "variant": "outline" },
+        { "text": "正在遊玩", "variant": "default" }
+      ],
+      "links": [
+        { "text": "官方網站", "href": "https://www.azurlane.tw", "variant": "outline" }
+      ]
+    },
+    {
+      "title": "学園アイドルマスター",
+      "description": "養偶像遊戲，順帶一提花海咲季我推！",
+      "image_url": "https://img.senen.dev/gakumas_hanami_saki.png",
+      "tags": [
+        { "text": "RPG", "variant": "secondary" },
+        { "text": "DMM/Mobile", "variant": "outline" },
+        { "text": "正在遊玩", "variant": "default" }
+      ],
+      "links": [
+        { "text": "官方網站", "href": "https://gakuen.idolmaster-official.jp", "variant": "outline" }
+      ]
+    },
+    {
+      "title": "劍星",
+      "description": "動作冒險兼換裝遊戲",
+      "image_url": "https://img.senen.dev/stellar_blade.jpg",
+      "tags": [
+        { "text": "Action", "variant": "secondary" },
+        { "text": "PS5 / PC", "variant": "outline" },
+        { "text": "正在遊玩", "variant": "default" }
+      ],
+      "links": [
+        { "text": "Steam", "href": "https://store.steampowered.com/app/3489700/_/", "variant": "outline" },
+        { "text": "PlayStation", "href": "https://www.playstation.com/en-us/games/stellar-blade/", "variant": "outline" }
+      ]
+    },
+    {
+      "title": "死亡擱淺",
+      "description": "小島秀夫的神，無需多言。",
+      "image_url": "https://img.senen.dev/death_stranding.jpg",
+      "tags": [
+        { "text": "Walking", "variant": "secondary" },
+        { "text": "PC / PS5", "variant": "outline" },
+        { "text": "已完成", "variant": "secondary" }
+      ],
+      "links": [
+        { "text": "Steam", "href": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/", "variant": "outline" },
+        { "text": "官方網站", "href": "https://deathstrandingpc.505games.com/zh-hant/", "variant": "outline" }
+      ]
     }
   ]
 }
