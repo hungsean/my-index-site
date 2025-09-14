@@ -17,7 +17,7 @@ export interface ConfigLoadResult {
 /**
  * 驗證個人資料配置
  */
-function validateProfile(profile: any): { profile: Profile; errors: ConfigError[] } {
+function validateProfile(profile: unknown): { profile: Profile; errors: ConfigError[] } {
   const errors: ConfigError[] = []
   
   if (!profile || typeof profile !== 'object') {
@@ -27,26 +27,27 @@ function validateProfile(profile: any): { profile: Profile; errors: ConfigError[
     }
   }
 
+  const profileObj = profile as Record<string, unknown>
   const validatedProfile: Profile = {
-    name: typeof profile.name === 'string' ? profile.name : '千円',
-    interests: typeof profile.interests === 'string' ? profile.interests : '遊戲 | 程式 | 僕咖 | 地偶',
+    name: typeof profileObj.name === 'string' ? profileObj.name : '千円',
+    interests: typeof profileObj.interests === 'string' ? profileObj.interests : '遊戲 | 程式 | 僕咖 | 地偶',
     avatar: {
-      src: profile.avatar?.src || 'https://img.senen.dev/IMG_20240704_135615_512x512.jpg',
-      alt: profile.avatar?.alt || '個人頭像',
-      fallback: profile.avatar?.fallback || '你'
+      src: (profileObj.avatar as Record<string, unknown>)?.src as string || 'https://img.senen.dev/IMG_20240704_135615_512x512.jpg',
+      alt: (profileObj.avatar as Record<string, unknown>)?.alt as string || '個人頭像',
+      fallback: (profileObj.avatar as Record<string, unknown>)?.fallback as string || '你'
     },
     background: {
-      src: profile.background?.src || 'https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg'
+      src: (profileObj.background as Record<string, unknown>)?.src as string || 'https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg'
     }
   }
 
-  if (!profile.name) {
+  if (!profileObj.name) {
     errors.push({ field: 'profile.name', message: '姓名缺失，使用預設值', severity: 'warning' })
   }
-  if (!profile.interests) {
+  if (!profileObj.interests) {
     errors.push({ field: 'profile.interests', message: '興趣描述缺失，使用預設值', severity: 'warning' })
   }
-  if (!profile.avatar?.src) {
+  if (!(profileObj.avatar as Record<string, unknown>)?.src) {
     errors.push({ field: 'profile.avatar.src', message: '頭像圖片缺失，使用預設值', severity: 'warning' })
   }
 
@@ -56,7 +57,7 @@ function validateProfile(profile: any): { profile: Profile; errors: ConfigError[
 /**
  * 驗證社交連結配置
  */
-function validateSocialLinks(socialLinks: any): { socialLinks: SocialLink[]; errors: ConfigError[] } {
+function validateSocialLinks(socialLinks: unknown): { socialLinks: SocialLink[]; errors: ConfigError[] } {
   const errors: ConfigError[] = []
   
   if (!Array.isArray(socialLinks)) {
@@ -67,8 +68,8 @@ function validateSocialLinks(socialLinks: any): { socialLinks: SocialLink[]; err
   }
 
   const validatedLinks: SocialLink[] = []
-  
-  socialLinks.forEach((link, index) => {
+
+  ;(socialLinks as unknown[]).forEach((link, index) => {
     if (!link || typeof link !== 'object') {
       errors.push({ 
         field: `socialLinks[${index}]`, 
@@ -78,26 +79,27 @@ function validateSocialLinks(socialLinks: any): { socialLinks: SocialLink[]; err
       return
     }
 
+    const linkObj = link as Record<string, unknown>
     const validatedLink: SocialLink = {
-      name: link.name || `連結 ${index + 1}`,
-      icon: link.icon || 'globe',
-      url: link.url || '#',
-      color: link.color || 'hover:text-gray-500',
-      type: ['link', 'copy', 'text'].includes(link.type) ? link.type : 'link'
+      name: linkObj.name as string || `連結 ${index + 1}`,
+      icon: linkObj.icon as string || 'globe',
+      url: linkObj.url as string || '#',
+      color: linkObj.color as string || 'hover:text-gray-500',
+      type: ['link', 'copy', 'text'].includes(linkObj.type as string) ? linkObj.type as 'link' | 'copy' | 'text' : 'link'
     }
 
-    if (!link.name) {
-      errors.push({ 
-        field: `socialLinks[${index}].name`, 
-        message: '社交連結名稱缺失，使用預設值', 
-        severity: 'warning' 
+    if (!linkObj.name) {
+      errors.push({
+        field: `socialLinks[${index}].name`,
+        message: '社交連結名稱缺失，使用預設值',
+        severity: 'warning'
       })
     }
-    if (!link.url) {
-      errors.push({ 
-        field: `socialLinks[${index}].url`, 
-        message: '社交連結 URL 缺失，使用預設值', 
-        severity: 'warning' 
+    if (!linkObj.url) {
+      errors.push({
+        field: `socialLinks[${index}].url`,
+        message: '社交連結 URL 缺失，使用預設值',
+        severity: 'warning'
       })
     }
 
@@ -110,22 +112,23 @@ function validateSocialLinks(socialLinks: any): { socialLinks: SocialLink[]; err
 /**
  * 驗證關於我配置
  */
-function validateAbout(about: any): { about?: About; errors: ConfigError[] } {
+function validateAbout(about: unknown): { about?: About; errors: ConfigError[] } {
   const errors: ConfigError[] = []
   
   if (!about || typeof about !== 'object') {
     return { about: undefined, errors: [] }
   }
 
+  const aboutObj = about as Record<string, unknown>
   const validatedAbout: About = {
-    story: typeof about.story === 'string' ? about.story : '我就是我，怎了？',
-    skills: Array.isArray(about.skills) ? about.skills.filter((skill: any) => typeof skill === 'string') : []
+    story: typeof aboutObj.story === 'string' ? aboutObj.story : '我就是我，怎了？',
+    skills: Array.isArray(aboutObj.skills) ? (aboutObj.skills as unknown[]).filter((skill: unknown) => typeof skill === 'string') : []
   }
 
-  if (!about.story) {
+  if (!aboutObj.story) {
     errors.push({ field: 'about.story', message: '個人故事缺失，使用預設值', severity: 'warning' })
   }
-  if (!Array.isArray(about.skills)) {
+  if (!Array.isArray(aboutObj.skills)) {
     errors.push({ field: 'about.skills', message: '技能列表格式錯誤，已過濾無效項目', severity: 'warning' })
   }
 
@@ -135,7 +138,7 @@ function validateAbout(about: any): { about?: About; errors: ConfigError[] } {
 /**
  * 驗證標籤陣列
  */
-function validateTags(tags: any, fieldName: string): { tags: Tag[]; errors: ConfigError[] } {
+function validateTags(tags: unknown, fieldName: string): { tags: Tag[]; errors: ConfigError[] } {
   const errors: ConfigError[] = []
   
   if (!tags) {
@@ -150,8 +153,8 @@ function validateTags(tags: any, fieldName: string): { tags: Tag[]; errors: Conf
   }
 
   const validatedTags: Tag[] = []
-  
-  tags.forEach((tag, index) => {
+
+  ;(tags as unknown[]).forEach((tag, index) => {
     if (!tag || typeof tag !== 'object') {
       errors.push({
         field: `${fieldName}[${index}]`,
@@ -161,7 +164,8 @@ function validateTags(tags: any, fieldName: string): { tags: Tag[]; errors: Conf
       return
     }
 
-    if (!tag.text || typeof tag.text !== 'string') {
+    const tagObj = tag as Record<string, unknown>
+    if (!tagObj.text || typeof tagObj.text !== 'string') {
       errors.push({
         field: `${fieldName}[${index}].text`,
         message: '標籤必須包含有效的 text 欄位',
@@ -171,10 +175,10 @@ function validateTags(tags: any, fieldName: string): { tags: Tag[]; errors: Conf
     }
 
     const validatedTag: Tag = {
-      content: tag.text, // 注意：ContentCard 使用 content，不是 text
-      variant: ['default', 'secondary', 'outline', 'destructive'].includes(tag.variant) 
-        ? tag.variant : 'outline',
-      style: ['normal', 'small'].includes(tag.style) ? tag.style : 'small'
+      content: tagObj.text as string, // 注意：ContentCard 使用 content，不是 text
+      variant: ['default', 'secondary', 'outline', 'destructive'].includes(tagObj.variant as string)
+        ? tagObj.variant as 'default' | 'secondary' | 'outline' | 'destructive' : 'outline',
+      style: ['normal', 'small'].includes(tagObj.style as string) ? tagObj.style as 'normal' | 'small' : 'small'
     }
 
     validatedTags.push(validatedTag)
@@ -186,7 +190,7 @@ function validateTags(tags: any, fieldName: string): { tags: Tag[]; errors: Conf
 /**
  * 驗證連結陣列
  */
-function validateLinks(links: any, fieldName: string): { links: Link[]; errors: ConfigError[] } {
+function validateLinks(links: unknown, fieldName: string): { links: Link[]; errors: ConfigError[] } {
   const errors: ConfigError[] = []
   
   if (!links) {
@@ -201,8 +205,8 @@ function validateLinks(links: any, fieldName: string): { links: Link[]; errors: 
   }
 
   const validatedLinks: Link[] = []
-  
-  links.forEach((link, index) => {
+
+  ;(links as unknown[]).forEach((link, index) => {
     if (!link || typeof link !== 'object') {
       errors.push({
         field: `${fieldName}[${index}]`,
@@ -212,7 +216,8 @@ function validateLinks(links: any, fieldName: string): { links: Link[]; errors: 
       return
     }
 
-    if (!link.text || typeof link.text !== 'string') {
+    const linkObj = link as Record<string, unknown>
+    if (!linkObj.text || typeof linkObj.text !== 'string') {
       errors.push({
         field: `${fieldName}[${index}].text`,
         message: '連結必須包含有效的 text 欄位',
@@ -221,7 +226,7 @@ function validateLinks(links: any, fieldName: string): { links: Link[]; errors: 
       return
     }
 
-    if (!link.href || typeof link.href !== 'string') {
+    if (!linkObj.href || typeof linkObj.href !== 'string') {
       errors.push({
         field: `${fieldName}[${index}].href`,
         message: '連結必須包含有效的 href 欄位',
@@ -231,11 +236,11 @@ function validateLinks(links: any, fieldName: string): { links: Link[]; errors: 
     }
 
     const validatedLink: Link = {
-      content: link.text, // 注意：ContentCard 使用 content，不是 text
-      href: link.href,
-      variant: ['default', 'outline', 'secondary', 'ghost', 'link'].includes(link.variant)
-        ? link.variant : 'outline',
-      size: ['default', 'sm', 'lg'].includes(link.size) ? link.size : 'sm'
+      content: linkObj.text as string, // 注意：ContentCard 使用 content，不是 text
+      href: linkObj.href as string,
+      variant: ['default', 'outline', 'secondary', 'ghost', 'link'].includes(linkObj.variant as string)
+        ? linkObj.variant as 'default' | 'outline' | 'secondary' | 'ghost' | 'link' : 'outline',
+      size: ['default', 'sm', 'lg'].includes(linkObj.size as string) ? linkObj.size as 'default' | 'sm' | 'lg' : 'sm'
     }
 
     validatedLinks.push(validatedLink)
@@ -247,7 +252,7 @@ function validateLinks(links: any, fieldName: string): { links: Link[]; errors: 
 /**
  * 驗證統一的內容項目 (用於 projects 和 games)
  */
-function validateContentItems(items: any, type: 'projects' | 'games'): { items?: ContentItem[]; errors: ConfigError[] } {
+function validateContentItems(items: unknown, type: 'projects' | 'games'): { items?: ContentItem[]; errors: ConfigError[] } {
   const errors: ConfigError[] = []
   
   if (!items) {
@@ -262,8 +267,8 @@ function validateContentItems(items: any, type: 'projects' | 'games'): { items?:
   }
 
   const validatedItems: ContentItem[] = []
-  
-  items.forEach((item, index) => {
+
+  ;(items as unknown[]).forEach((item, index) => {
     if (!item || typeof item !== 'object') {
       errors.push({ 
         field: `${type}[${index}]`, 
@@ -273,7 +278,8 @@ function validateContentItems(items: any, type: 'projects' | 'games'): { items?:
       return
     }
 
-    if (!item.title || !item.description) {
+    const itemObj = item as Record<string, unknown>
+    if (!itemObj.title || !itemObj.description) {
       errors.push({
         field: `${type}[${index}]`,
         message: `${type === 'projects' ? '專案' : '遊戲'}缺少必要欄位 (title, description)`,
@@ -283,29 +289,40 @@ function validateContentItems(items: any, type: 'projects' | 'games'): { items?:
     }
 
     // 驗證 tags
-    const { errors: tagErrors } = validateTags(item.tags, `${type}[${index}].tags`)
+    const { errors: tagErrors } = validateTags(itemObj.tags, `${type}[${index}].tags`)
     errors.push(...tagErrors)
 
     // 驗證 links
-    const { errors: linkErrors } = validateLinks(item.links, `${type}[${index}].links`)
+    const { errors: linkErrors } = validateLinks(itemObj.links, `${type}[${index}].links`)
     errors.push(...linkErrors)
 
     // 直接按照 ContentItem 類型定義構建，配合類型系統
     const validatedItem: ContentItem = {
-      title: item.title,
-      description: item.description,
-      ...(item.image_url && { image_url: item.image_url }),
-      tags: item.tags ? item.tags.map((tag: any) => ({
-        text: tag.text,
-        variant: tag.variant,
-        style: tag.style
+      title: itemObj.title as string,
+      description: itemObj.description as string,
+      tags: itemObj.tags ? (itemObj.tags as Record<string, unknown>[]).map((tag: Record<string, unknown>) => ({
+        text: tag.text as string,
+        variant: ['default', 'secondary', 'outline', 'destructive'].includes(tag.variant as string)
+          ? tag.variant as 'default' | 'secondary' | 'outline' | 'destructive'
+          : undefined,
+        style: ['normal', 'small'].includes(tag.style as string)
+          ? tag.style as 'normal' | 'small'
+          : undefined
       })) : undefined,
-      links: item.links ? item.links.map((link: any) => ({
-        text: link.text,
-        href: link.href,
-        variant: link.variant,
-        size: link.size
+      links: itemObj.links ? (itemObj.links as Record<string, unknown>[]).map((link: Record<string, unknown>) => ({
+        text: link.text as string,
+        href: link.href as string,
+        variant: ['default', 'outline', 'secondary', 'ghost', 'link'].includes(link.variant as string)
+          ? link.variant as 'default' | 'outline' | 'secondary' | 'ghost' | 'link'
+          : undefined,
+        size: ['default', 'sm', 'lg'].includes(link.size as string)
+          ? link.size as 'default' | 'sm' | 'lg'
+          : undefined
       })) : undefined
+    }
+
+    if (itemObj.image_url) {
+      validatedItem.image_url = itemObj.image_url as string
     }
 
     validatedItems.push(validatedItem)
@@ -337,7 +354,7 @@ function getDefaultProfile(): Profile {
  */
 export async function loadConfig(): Promise<ConfigLoadResult> {
   const errors: ConfigError[] = []
-  let rawData: any
+  let rawData: unknown
 
   try {
     const response = await fetch('/config.json')
@@ -361,11 +378,12 @@ export async function loadConfig(): Promise<ConfigLoadResult> {
   }
 
   // 驗證各個部分
-  const { profile, errors: profileErrors } = validateProfile(rawData.profile)
-  const { socialLinks, errors: socialErrors } = validateSocialLinks(rawData.socialLinks)
-  const { about, errors: aboutErrors } = validateAbout(rawData.about)
-  const { items: projects, errors: projectErrors } = validateContentItems(rawData.projects, 'projects')
-  const { items: games, errors: gameErrors } = validateContentItems(rawData.games, 'games')
+  const rawDataObj = rawData as Record<string, unknown>
+  const { profile, errors: profileErrors } = validateProfile(rawDataObj.profile)
+  const { socialLinks, errors: socialErrors } = validateSocialLinks(rawDataObj.socialLinks)
+  const { about, errors: aboutErrors } = validateAbout(rawDataObj.about)
+  const { items: projects, errors: projectErrors } = validateContentItems(rawDataObj.projects, 'projects')
+  const { items: games, errors: gameErrors } = validateContentItems(rawDataObj.games, 'games')
 
   // 合併所有錯誤
   errors.push(...profileErrors, ...socialErrors, ...aboutErrors, ...projectErrors, ...gameErrors)
