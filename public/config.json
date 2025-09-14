@@ -132,7 +132,7 @@
     {
       "title": "碧藍航線",
       "description": "理論上是個彈幕射擊的艦娘遊戲，但本體是肝船和賣瑟瑟的造型。",
-      "image_url": "https://img.senen.dev/azuelane_laffey.png",
+      "image_url": "https://img.senen.dev/web/azuelane_laffey.png",
       "tags": [
         { "text": "RPG", "variant": "secondary" },
         { "text": "Mobile", "variant": "outline" },
@@ -145,7 +145,7 @@
     {
       "title": "学園アイドルマスター",
       "description": "養偶像遊戲，順帶一提花海咲季我推！",
-      "image_url": "https://img.senen.dev/gakumas_hanami_saki.png",
+      "image_url": "https://img.senen.dev/web/gakumas_hanami_saki.png",
       "tags": [
         { "text": "RPG", "variant": "secondary" },
         { "text": "DMM/Mobile", "variant": "outline" },
@@ -158,7 +158,7 @@
     {
       "title": "劍星",
       "description": "動作冒險兼換裝遊戲",
-      "image_url": "https://img.senen.dev/stellar_blade.jpg",
+      "image_url": "https://img.senen.dev/web/stellar_blade.jpg",
       "tags": [
         { "text": "Action", "variant": "secondary" },
         { "text": "PS5 / PC", "variant": "outline" },
@@ -172,7 +172,7 @@
     {
       "title": "死亡擱淺",
       "description": "小島秀夫的神，無需多言。",
-      "image_url": "https://img.senen.dev/death_stranding.jpg",
+      "image_url": "https://img.senen.dev/web/death_stranding.jpg",
       "tags": [
         { "text": "Walking", "variant": "secondary" },
         { "text": "PC / PS5", "variant": "outline" },
