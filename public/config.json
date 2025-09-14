@@ -23,7 +23,7 @@
       "name": "Twitter",
       "icon": "twitter",
       "url": "https://twitter.com/senen_3454",
-      "color": "text-blue-400",
+      "color": "text-gray-800 dark:text-gray-300",
       "type": "link"
     },
     {
