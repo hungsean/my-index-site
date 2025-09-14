@@ -1,6 +1,7 @@
 import { Toaster } from '@/components/ui/sonner'
 import { useState, useEffect } from 'react'
 import { ThemeProvider, useTheme } from 'next-themes'
+import { HelmetProvider } from 'react-helmet-async'
 import type { SiteConfig } from '@/types/config'
 import { loadConfig, logConfigErrors, type ConfigError } from '@/lib/config-loader'
 import { BsMoonStars, BsSun } from "react-icons/bs"
@@ -10,6 +11,7 @@ import { Projects } from './components/sections/Projects'
 import { Games } from './components/sections/Games'
 import { Contact } from './components/sections/Contact'
 import { Button } from '@/components/ui/button'
+import { StructuredData } from './components/StructuredData'
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -80,70 +82,79 @@ function App() {
   // 如果正在載入，顯示載入動畫
   if (loading) {
     return (
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="text-center space-y-4">
-            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-muted-foreground">載入中...</p>
+      <HelmetProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="text-center space-y-4">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+              <p className="text-muted-foreground">載入中...</p>
+            </div>
           </div>
-        </div>
-      </ThemeProvider>
+        </ThemeProvider>
+      </HelmetProvider>
     )
   }
 
   // 確保配置存在（config-loader 已經提供預設值）
   if (!config) {
     return (
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="text-center space-y-4">
-            <p className="text-destructive">配置載入失敗</p>
+      <HelmetProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="text-center space-y-4">
+              <p className="text-destructive">配置載入失敗</p>
+            </div>
           </div>
-        </div>
-      </ThemeProvider>
+        </ThemeProvider>
+      </HelmetProvider>
     )
   }
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className="min-h-screen">
-        {/* 主題切換按鈕 */}
-        <ThemeToggle />
-        
-        {/* 錯誤和警告提示 */}
-        {getErrorMessage() && (
-          <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 p-3 bg-destructive/10 border border-destructive/20 rounded-lg max-w-md">
-            <p className="text-sm text-destructive text-center">
-              {getErrorMessage()}
-            </p>
-            {!isValid && (
-              <p className="text-xs text-muted-foreground text-center mt-1">
-                使用預設配置或部分功能可能受影響
-              </p>
-            )}
-          </div>
-        )}
-        
-        {/* 開發模式警告提示 */}
-        {hasWarnings && import.meta.env.DEV && (
-          <div className="fixed top-32 left-1/2 transform -translate-x-1/2 z-40 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg max-w-md">
-            <p className="text-xs text-yellow-600 dark:text-yellow-400 text-center">
-              配置有警告，請檢查控制台
-            </p>
-          </div>
-        )}
-        
-        {/* 主要內容區域 */}
-        <Hero config={config} />
-        <About config={config} />
-        <Projects config={config} />
-        <Games config={config} />
-        <Contact config={config} />
+    <HelmetProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <div className="min-h-screen">
+          {/* SEO結構化資料 */}
+          <StructuredData config={config} />
 
-        {/* Toast 通知 */}
-        <Toaster />
-      </div>
-    </ThemeProvider>
+          {/* 主題切換按鈕 */}
+          <ThemeToggle />
+
+          {/* 錯誤和警告提示 */}
+          {getErrorMessage() && (
+            <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 p-3 bg-destructive/10 border border-destructive/20 rounded-lg max-w-md">
+              <p className="text-sm text-destructive text-center">
+                {getErrorMessage()}
+              </p>
+              {!isValid && (
+                <p className="text-xs text-muted-foreground text-center mt-1">
+                  使用預設配置或部分功能可能受影響
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* 開發模式警告提示 */}
+          {hasWarnings && import.meta.env.DEV && (
+            <div className="fixed top-32 left-1/2 transform -translate-x-1/2 z-40 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg max-w-md">
+              <p className="text-xs text-yellow-600 dark:text-yellow-400 text-center">
+                配置有警告，請檢查控制台
+              </p>
+            </div>
+          )}
+
+          {/* 主要內容區域 */}
+          <Hero config={config} />
+          <About config={config} />
+          <Projects config={config} />
+          <Games config={config} />
+          <Contact config={config} />
+
+          {/* Toast 通知 */}
+          <Toaster />
+        </div>
+      </ThemeProvider>
+    </HelmetProvider>
   )
 }
 

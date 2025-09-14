@@ -34,7 +34,7 @@ export function About({ config }: AboutProps) {
         <div className="text-center mb-16">
           <h2 className="text-2xl sm:text-3xl md:text-4xl mb-4">關於我</h2>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            熱愛技術創新和問題解決的開發者
+            自我介紹的部分，簡單介紹我自己
           </p>
         </div>
         
