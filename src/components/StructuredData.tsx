@@ -1,6 +1,21 @@
 import { Helmet } from 'react-helmet-async'
 import type { SiteConfig } from '@/types/config'
 
+// 安全地序列化 JSON-LD 數據
+function safeJsonStringify(data: unknown): string {
+  try {
+    // JSON.stringify 本身是安全的，但我們進行額外的驗證
+    const jsonString = JSON.stringify(data)
+    // 確保輸出是有效的 JSON
+    JSON.parse(jsonString)
+    return jsonString
+  } catch (error) {
+    console.error('Failed to serialize JSON-LD data:', error)
+    // 返回空對象作為後備
+    return JSON.stringify({})
+  }
+}
+
 interface StructuredDataProps {
   readonly config: SiteConfig
 }
@@ -128,7 +143,7 @@ export function StructuredData({ config }: StructuredDataProps) {
           key={`${schema["@type"]}-${index}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema)
+            __html: safeJsonStringify(schema)
           }}
         />
       ))}

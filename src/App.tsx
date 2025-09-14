@@ -12,6 +12,7 @@ import { Games } from './components/sections/Games'
 import { Contact } from './components/sections/Contact'
 import { Button } from '@/components/ui/button'
 import { StructuredData } from './components/StructuredData'
+import ErrorBoundary from './components/ErrorBoundary'
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -22,6 +23,8 @@ function ThemeToggle() {
       size="icon"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
       className="fixed top-4 right-4 z-20 backdrop-blur-md bg-card/70 border-border/20"
+      aria-label={`切換到${theme === 'light' ? '深色' : '淺色'}主題`}
+      title={`目前: ${theme === 'light' ? '淺色' : '深色'}主題，點擊切換`}
     >
       <BsSun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <BsMoonStars className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -143,12 +146,26 @@ function App() {
             </div>
           )}
 
-          {/* 主要內容區域 */}
-          <Hero config={config} />
-          <About config={config} />
-          <Projects config={config} />
-          <Games config={config} />
-          <Contact config={config} />
+          {/* 主要內容區域 - 使用 Error Boundary 保護每個 section */}
+          <ErrorBoundary name="Hero Section">
+            <Hero config={config} />
+          </ErrorBoundary>
+
+          <ErrorBoundary name="About Section">
+            <About config={config} />
+          </ErrorBoundary>
+
+          <ErrorBoundary name="Projects Section">
+            <Projects config={config} />
+          </ErrorBoundary>
+
+          <ErrorBoundary name="Games Section">
+            <Games config={config} />
+          </ErrorBoundary>
+
+          <ErrorBoundary name="Contact Section">
+            <Contact config={config} />
+          </ErrorBoundary>
 
           {/* Toast 通知 */}
           <Toaster />

@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import type { SiteConfig, SocialLink } from '@/types/config'
+import { validateUrl, validateDiscordUsername } from '@/lib/url-validation'
 import { 
   BsGithub, 
   BsTwitterX, 
@@ -24,11 +25,30 @@ export function Hero({ config }: Readonly<HeroProps>) {
   // 處理不同類型的點擊事件
   const handleSocialClick = async (social: SocialLink) => {
     switch (social.type) {
-      case 'link':
-        // 正常連結會由 <a> 標籤處理
+      case 'link': {
+        // 使用安全的 URL 開啟
+        const validation = validateUrl(social.url)
+        if (!validation.isValid || !validation.isSafe) {
+          toast.error('不安全的連結', {
+            description: validation.error,
+          });
+          return;
+        }
+        // 連結會由 <a> 標籤處理，但我們已經驗證過了
         break;
+      }
       case 'copy':
         try {
+          // 對於 Discord，特別驗證用戶名格式
+          if (social.icon.toLowerCase() === 'discord') {
+            if (!validateDiscordUsername(social.url)) {
+              toast.error('Discord 用戶名格式錯誤', {
+                description: '請確認用戶名格式正確',
+              });
+              return;
+            }
+          }
+
           await navigator.clipboard.writeText(social.url);
           toast.success(`已複製 ${social.name}`, {
             description: social.url,
@@ -128,13 +148,25 @@ export function Hero({ config }: Readonly<HeroProps>) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2"
+                      aria-label={`前往 ${social.name} (在新分頁開啟)`}
+                      onClick={(e) => {
+                        const validation = validateUrl(social.url)
+                        if (!validation.isValid || !validation.isSafe) {
+                          e.preventDefault()
+                          handleSocialClick(social)
+                        }
+                      }}
                     >
-                      <IconComponent className={`h-5 w-5 flex-shrink-0 ${social.color || ''}`} />
+                      <IconComponent
+                        className={`h-5 w-5 flex-shrink-0 ${social.color || ''}`}
+                        aria-hidden="true"
+                      />
                       <span className="font-medium">{social.name}</span>
                     </a>
                   </Button>
                 )
               } else {
+                const actionText = social.type === 'copy' ? '複製' : '顯示'
                 return (
                   <Button
                     key={social.name}
@@ -142,8 +174,12 @@ export function Hero({ config }: Readonly<HeroProps>) {
                     size="sm"
                     className="hover:scale-105 transition-transform backdrop-blur-sm text-xs sm:text-sm"
                     onClick={() => handleSocialClick(social)}
+                    aria-label={`${actionText} ${social.name} 資訊`}
                   >
-                    <IconComponent className={`h-5 w-5 flex-shrink-0 mr-2 ${social.color || ''}`} />
+                    <IconComponent
+                      className={`h-5 w-5 flex-shrink-0 mr-2 ${social.color || ''}`}
+                      aria-hidden="true"
+                    />
                     <span className="font-medium">{social.name}</span>
                   </Button>
                 )
@@ -154,12 +190,19 @@ export function Hero({ config }: Readonly<HeroProps>) {
           {/* 了解更多按鈕 */}
           <Button
             size="lg"
-            className="animate-bounce"
-            onClick={() =>
-              document
-                .getElementById("about")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+            className="animate-bounce focus:animate-none"
+            onClick={() => {
+              const aboutSection = document.getElementById("about")
+              if (aboutSection) {
+                aboutSection.scrollIntoView({ behavior: "smooth" })
+                // 在滾動完成後將焦點移到該區域
+                setTimeout(() => {
+                  aboutSection.setAttribute('tabindex', '-1')
+                  aboutSection.focus()
+                }, 800)
+              }
+            }}
+            aria-label="向下滾動到關於我的區域"
           >
             了解更多關於我
           </Button>

@@ -16,6 +16,7 @@ export interface Link {
   icon?: ReactNode
   variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'link'
   size?: 'default' | 'sm' | 'lg'
+  disabled?: boolean
 }
 
 export interface ContentCardProps {
@@ -62,12 +63,13 @@ export function ContentCard({
 
         {/* Tags Section - at bottom */}
         {tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-3">
+          <div className="flex flex-wrap gap-1 mb-3" role="list" aria-label={`${title} 的標籤`}>
             {tags.map((tag, index) => (
               <Badge
                 key={index}
                 variant={tag.variant || "outline"}
                 className={tag.style === 'small' ? "text-xs" : undefined}
+                role="listitem"
               >
                 {tag.content}
               </Badge>
@@ -77,16 +79,24 @@ export function ContentCard({
 
         {/* Links Section - at very bottom */}
         {links.length > 0 && (
-          <div className="flex gap-2">
+          <div className="flex gap-2" role="list" aria-label={`${title} 的相關連結`}>
             {links.map((link, index) => (
               <Button
                 key={index}
                 size={link.size || "sm"}
                 variant={link.variant || "outline"}
                 asChild
+                disabled={link.disabled}
+                role="listitem"
               >
-                <a href={link.href} target="_blank" rel="noopener noreferrer">
-                  {link.icon && <span className="w-4 h-4 mr-1">{link.icon}</span>}
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${link.content} (在新分頁開啟)`}
+                  tabIndex={link.disabled ? -1 : undefined}
+                >
+                  {link.icon && <span className="w-4 h-4 mr-1" aria-hidden="true">{link.icon}</span>}
                   {link.content}
                 </a>
               </Button>

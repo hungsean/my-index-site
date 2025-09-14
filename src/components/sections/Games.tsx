@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { ContentCard, type Tag, type Link } from '../ContentCard'
 import type { SiteConfig } from '@/types/config'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import { validateUrl } from '@/lib/url-validation'
 
 interface GamesProps {
   config: SiteConfig
@@ -11,8 +12,8 @@ interface GamesProps {
 export function Games({ config }: GamesProps) {
   const [showAll, setShowAll] = useState(false)
   
-  // 預設遊戲，如果配置檔案沒有則使用這些 (使用新的統一格式)
-  const defaultGames = [
+  // 使用 useMemo 緩存預設遊戲，避免每次渲染重新創建
+  const defaultGames = useMemo(() => [
     {
       title: "原神",
       description: "開放世界冒險遊戲，美麗的世界觀和豐富的劇情",
@@ -59,14 +60,34 @@ export function Games({ config }: GamesProps) {
         { text: "已完成", variant: "secondary" }
       ]
     }
-  ]
+  ], [])
 
-  const games = config.games || defaultGames
-  const displayGames = showAll ? games : games.slice(0, 4)
-  const hasMoreGames = games.length > 4
+  // 使用 useMemo 優化 games 數據處理
+  const processedGames = useMemo(() => {
+    const games = config.games || defaultGames
+
+    // 驗證每個遊戲的 URL
+    const validatedGames = games.map(game => ({
+      ...game,
+      links: game.links?.map(link => {
+        const validation = validateUrl(link.href)
+        if (!validation.isValid || !validation.isSafe) {
+          console.warn(`Invalid URL in game "${game.title}":`, link.href, validation.error)
+          return { ...link, href: '#', disabled: true }
+        }
+        return link
+      }) || []
+    }))
+
+    return {
+      games: validatedGames,
+      displayGames: showAll ? validatedGames : validatedGames.slice(0, 4),
+      hasMoreGames: validatedGames.length > 4
+    }
+  }, [config.games, showAll, defaultGames])
 
   // 如果沒有遊戲要顯示，就不渲染這個節區
-  if (!games.length) return null
+  if (!processedGames.games.length) return null
 
   return (
     <section id="games" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
@@ -79,24 +100,25 @@ export function Games({ config }: GamesProps) {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {displayGames.map((game, index) => {
-            // 直接使用新格式的 tags 和 links
+          {processedGames.displayGames.map((game, index) => {
+            // 直接處理 tags 和 links 轉換，不在 map 中使用 useMemo
             const contentCardTags: Tag[] = game.tags?.map((tag: { text: string; variant?: string; style?: string }) => ({
               content: tag.text,
               variant: (tag.variant as Tag['variant']) || 'outline',
               style: (tag.style as Tag['style']) || 'small'
             })) || []
 
-            const contentCardLinks: Link[] = game.links?.map((link: { text: string; href: string; variant?: string; size?: string }) => ({
+            const contentCardLinks: Link[] = game.links?.map((link: { text: string; href: string; variant?: string; size?: string; disabled?: boolean }) => ({
               content: link.text,
               href: link.href,
               variant: (link.variant as Link['variant']) || 'outline',
-              size: (link.size as Link['size']) || 'sm'
+              size: (link.size as Link['size']) || 'sm',
+              disabled: link.disabled
             })) || []
 
             return (
               <ContentCard
-                key={index}
+                key={`game-${game.title}-${index}`}
                 image_url={game.image_url}
                 title={game.title}
                 description={game.description}
@@ -107,13 +129,14 @@ export function Games({ config }: GamesProps) {
           })}
         </div>
         
-        {hasMoreGames && (
+        {processedGames.hasMoreGames && (
           <div className="text-center mt-12">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="lg"
               onClick={() => setShowAll(!showAll)}
               className="px-8"
+              aria-label={showAll ? '收起部分遊戲項目' : `顯示全部 ${processedGames.games.length} 個遊戲項目`}
             >
               {showAll ? '顯示較少' : '查看更多遊戲'}
             </Button>
