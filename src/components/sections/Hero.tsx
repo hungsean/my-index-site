@@ -129,7 +129,7 @@ export function Hero({ config }: Readonly<HeroProps>) {
                       rel="noopener noreferrer"
                       className="flex items-center gap-2"
                     >
-                      <IconComponent className="h-5 w-5 flex-shrink-0" />
+                      <IconComponent className={`h-5 w-5 flex-shrink-0 ${social.color || ''}`} />
                       <span className="font-medium">{social.name}</span>
                     </a>
                   </Button>
@@ -143,7 +143,7 @@ export function Hero({ config }: Readonly<HeroProps>) {
                     className="hover:scale-105 transition-transform backdrop-blur-sm text-xs sm:text-sm"
                     onClick={() => handleSocialClick(social)}
                   >
-                    <IconComponent className="h-5 w-5 flex-shrink-0 mr-2" />
+                    <IconComponent className={`h-5 w-5 flex-shrink-0 mr-2 ${social.color || ''}`} />
                     <span className="font-medium">{social.name}</span>
                   </Button>
                 )
