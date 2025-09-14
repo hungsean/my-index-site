@@ -1,8 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { toast } from 'sonner'
-import { useState } from 'react'
 import type { SiteConfig, SocialLink } from '@/types/config'
 import { 
   BsGithub, 
@@ -22,10 +20,7 @@ interface HeroProps {
   config: SiteConfig
 }
 
-export function Hero({ config }: HeroProps) {
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [dialogContent, setDialogContent] = useState('')
-
+export function Hero({ config }: Readonly<HeroProps>) {
   // 處理不同類型的點擊事件
   const handleSocialClick = async (social: SocialLink) => {
     switch (social.type) {
@@ -46,8 +41,9 @@ export function Hero({ config }: HeroProps) {
         }
         break;
       case 'text':
-        setDialogContent(social.url);
-        setDialogOpen(true);
+        toast.info(social.name, {
+          description: social.url,
+        });
         break;
     }
   };
@@ -87,9 +83,8 @@ export function Hero({ config }: HeroProps) {
   }
 
   return (
-    <>
-      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/20 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto text-center">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/20 px-4 sm:px-6">
+      <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
             {/* 頭像區域 */}
             <div className="mb-6 flex justify-center">
@@ -168,20 +163,7 @@ export function Hero({ config }: HeroProps) {
           >
             了解更多關於我
           </Button>
-        </div>
-      </section>
-
-      {/* Dialog 彈窗 */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>我的網站</DialogTitle>
-            <DialogDescription>
-              {dialogContent}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    </>
+      </div>
+    </section>
   )
 }
