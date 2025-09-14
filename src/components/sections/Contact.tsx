@@ -34,8 +34,8 @@ export function Contact({ config }: ContactProps) {
           {/* 電子郵件 */}
           <Card className="text-center hover:shadow-lg transition-shadow flex flex-col justify-center">
             <CardHeader className="flex-shrink-0">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <BsEnvelope className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mx-auto mb-4">
+                <BsEnvelope className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <CardTitle>電子郵件</CardTitle>
               <CardDescription>快速聯絡的最佳方式</CardDescription>
@@ -52,8 +52,8 @@ export function Contact({ config }: ContactProps) {
           {/* Discord */}
           <Card className="text-center hover:shadow-lg transition-shadow flex flex-col justify-center">
             <CardHeader className="flex-shrink-0">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <BsDiscord className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center mx-auto mb-4">
+                <BsDiscord className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
               </div>
               <CardTitle>即時訊息</CardTitle>
               <CardDescription>透過 Discord 聊天</CardDescription>
@@ -86,8 +86,8 @@ export function Contact({ config }: ContactProps) {
           {/* Instagram 日常分享 */}
           <Card className="text-center hover:shadow-lg transition-shadow flex flex-col justify-center">
             <CardHeader className="flex-shrink-0">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <BsInstagram className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center mx-auto mb-4">
+                <BsInstagram className="w-6 h-6 text-pink-600 dark:text-pink-400" />
               </div>
               <CardTitle>日常生活</CardTitle>
               <CardDescription>了解我的日常與興趣愛好</CardDescription>
