@@ -1,5 +1,12 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 
+// TODO: 優化圖片載入速度 - 考慮以下方向：
+// 1. 實作 Progressive JPEG 支援
+// 2. 增加圖片預載入機制 (prefetch)
+// 3. 整合 CDN 加速 (如 Cloudflare Images)
+// 4. 實作響應式圖片 (srcset, sizes)
+// 5. 增加 blur placeholder 或 LQIP (Low Quality Image Placeholder)
+
 interface ImageWithFallbackProps {
   readonly src: string
   readonly alt: string
