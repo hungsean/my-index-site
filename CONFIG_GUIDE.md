@@ -14,9 +14,12 @@ public/config.json
 
 - ✅ **強健的驗證機制**：自動檢查配置格式和必要欄位
 - ✅ **預設值**：缺失的欄位會自動填入合理預設值
+- ✅ **向後相容**：現有配置檔案無需修改即可正常運作
+- ✅ **優雅降級**：配置無效時自動使用預設內容，不會導致應用崩潰
 - ✅ **詳細錯誤報告**：開發模式下提供詳細的錯誤和警告資訊
 - ✅ **統一配置格式**：專案和遊戲使用完全統一的 tags 和 links 系統
 - ✅ **統一卡片系統**：專案和遊戲使用統一的 ContentCard 元件
+- ✅ **強健的圖片處理**：ImageWithFallback 元件自動處理圖片載入失敗
 
 ## 配置檔案結構
 
@@ -57,9 +60,37 @@ public/config.json
 
 #### 連結類型說明
 
-- **`link`**: 一般外部連結，點擊會開啟新分頁
-- **`copy`**: 複製到剪貼簿，會顯示成功提示
-- **`text`**: 顯示對話框，顯示文字內容
+- **`link`**: 一般外部連結，點擊會開啟新分頁（如 GitHub、Twitter、Instagram）
+- **`copy`**: 複製到剪貼簿，會顯示成功提示（如 Discord ID）
+- **`text`**: 顯示對話框，顯示文字內容（如網站資訊）
+
+#### 社交連結範例
+
+支援多帳號配置，例如 Instagram 和 Threads 可以分別設定主帳號和副帳號：
+
+```json
+{
+  "name": "Instagram(main)",
+  "icon": "instagram",
+  "url": "https://instagram.com/username",
+  "color": "text-pink-400",
+  "type": "link"
+},
+{
+  "name": "Instagram(idol)",
+  "icon": "instagram",
+  "url": "https://instagram.com/idol_username",
+  "color": "text-pink-400",
+  "type": "link"
+},
+{
+  "name": "Threads(main)",
+  "icon": "threads",
+  "url": "https://threads.net/@username",
+  "color": "text-gray-400",
+  "type": "link"
+}
+```
 
 ### 關於我 (about) - 可選
 
@@ -299,9 +330,10 @@ public/config.json
 
 ### 圖片管理
 
-- **外部圖片**：使用完整的 URL 路徑
+- **外部圖片**：使用完整的 URL 路徑（如 `https://img.senen.dev/avatar.jpg`）
 - **本地圖片**：放在 `public/` 目錄下，使用相對路徑（如 `/images/avatar.jpg`）
 - **Unsplash 關鍵字**：使用關鍵字自動生成佔位圖片（如 "web+development", "game+screenshot"）
+- **自動 Fallback**：使用 ImageWithFallback 元件，圖片載入失敗時會自動顯示替代內容
 
 ### 開發測試
 
@@ -324,7 +356,7 @@ public/config.json
 ### 社群平台
 
 - `github` - GitHub 圖標 (BsGithub)
-- `twitter` / `x` - X (Twitter) 圖標 (BsTwitterX)
+- `twitter` / `x` - X (Twitter) 圖標 (BsTwitterX) - **注意：twitter 會自動對應到 BsTwitterX**
 - `linkedin` - LinkedIn 圖標 (BsLinkedin)
 - `instagram` - Instagram 圖標 (BsInstagram)
 - `facebook` - Facebook 圖標 (BsFacebook)
@@ -332,7 +364,7 @@ public/config.json
 - `telegram` - Telegram 圖標 (BsTelegram)
 - `whatsapp` - WhatsApp 圖標 (BsWhatsapp)
 - `wechat` - WeChat 圖標 (BsWechat)
-- `threads` - Threads 圖標 (BsThreads)
+- `threads` - Threads 圖標 (BsThreads) - **支援 Meta 的 Threads 平台**
 
 ### 聯絡方式
 
@@ -348,6 +380,8 @@ public/config.json
 ### 使用說明
 
 - 使用小寫格式的圖標名稱，如 `"icon": "github"`
+- 保持向後兼容原始大寫格式（如 `BsGithub`）
 - 如果找不到對應的圖標，系統會自動使用 BsGlobe 圖標作為替代
+- Twitter 圖標會自動對應到現代的 X (Twitter) 圖標 (BsTwitterX)
 - 所有圖標使用 Bootstrap Icons，提供一致的視覺體驗
-- 支援豐富的社群平台和通用圖標
+- 支援豐富的社群平台和通用圖標，包括 Threads、Discord 等
