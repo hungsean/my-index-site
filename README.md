@@ -77,7 +77,7 @@ pnpm dlx shadcn@latest add [component]
 
 ## 📁 專案結構
 
-```
+```tree
 my-index-site/
 ├── public/
 │   └── config.json          # 網站內容設定
