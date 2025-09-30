@@ -107,11 +107,12 @@ export function Hero({ config }: Readonly<HeroProps>) {
       <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
             {/* 頭像區域 */}
+            {/* TODO: 優化圖片載入速度 - 頭像為首屏關鍵元素，應設定為 priority 預載 */}
             <div className="mb-6 flex justify-center">
               <Avatar className="w-24 h-24 sm:w-28 md:w-32 sm:h-28 md:h-32 ring-4 ring-primary/20">
-                <AvatarImage 
-                  src={config.profile.avatar.src} 
-                  alt={config.profile.avatar.alt} 
+                <AvatarImage
+                  src={config.profile.avatar.src}
+                  alt={config.profile.avatar.alt}
                   className="object-cover"
                 />
                 <AvatarFallback className="bg-primary text-primary-foreground text-4xl font-bold">
