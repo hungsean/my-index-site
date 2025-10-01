@@ -13,6 +13,8 @@ import { Contact } from './components/sections/Contact'
 import { Button } from '@/components/ui/button'
 import { StructuredData } from './components/StructuredData'
 import ErrorBoundary from './components/ErrorBoundary'
+import { useImagePreloader } from '@/hooks/useImagePreloader'
+import { LoadingScreen } from '@/components/LoadingScreen'
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -40,6 +42,9 @@ function App() {
   const [errors, setErrors] = useState<ConfigError[]>([])
   const [isValid, setIsValid] = useState(true)
 
+  // 圖片預載入
+  const { progress, isLoading: isPreloading } = useImagePreloader(config)
+
   // 載入配置文件
   useEffect(() => {
     const loadAppConfig = async () => {
@@ -49,7 +54,7 @@ function App() {
         setConfig(result.config)
         setErrors(result.errors)
         setIsValid(result.isValid)
-        
+
         // 在開發模式下記錄錯誤和警告
         logConfigErrors(result.errors)
       } catch (err) {
@@ -82,17 +87,25 @@ function App() {
 
   const hasWarnings = errors.some(e => e.severity === 'warning')
 
-  // 如果正在載入，顯示載入動畫
-  if (loading) {
+  // 如果正在載入配置或預載圖片，顯示載入畫面
+  if (loading || isPreloading) {
     return (
       <HelmetProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="text-center space-y-4">
-              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="text-muted-foreground">載入中...</p>
+          {loading ? (
+            <div className="min-h-screen flex items-center justify-center p-4">
+              <div className="text-center space-y-4">
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                <p className="text-muted-foreground">載入設定檔...</p>
+              </div>
             </div>
-          </div>
+          ) : (
+            <LoadingScreen
+              percentage={progress.percentage}
+              loaded={progress.loaded}
+              total={progress.total}
+            />
+          )}
         </ThemeProvider>
       </HelmetProvider>
     )

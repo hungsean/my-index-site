@@ -1,20 +1,11 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-
-// TODO: 優化圖片載入速度 - 考慮以下方向：
-// 1. 實作 Progressive JPEG 支援
-// 2. 增加圖片預載入機制 (prefetch)
-// 3. 整合 CDN 加速 (如 Cloudflare Images)
-// 4. 實作響應式圖片 (srcset, sizes)
-// 5. 增加 blur placeholder 或 LQIP (Low Quality Image Placeholder)
+import { useState, useMemo } from 'react'
 
 interface ImageWithFallbackProps {
   readonly src: string
   readonly alt: string
   readonly className?: string
   readonly fallback?: string
-  readonly lazy?: boolean
   readonly webp?: boolean
-  readonly priority?: boolean
 }
 
 export function ImageWithFallback({
@@ -22,75 +13,33 @@ export function ImageWithFallback({
   alt,
   className,
   fallback = '/placeholder.jpg',
-  lazy = true,
-  webp = true,
-  priority = false
+  webp = true
 }: ImageWithFallbackProps) {
-  const [imgSrc, setImgSrc] = useState(priority ? src : '')
+  const [imgSrc, setImgSrc] = useState(src)
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [isInView, setIsInView] = useState(!lazy || priority)
-  const imgRef = useRef<HTMLImageElement>(null)
 
   // WebP支援檢測 - 使用 useMemo 緩存結果
   const supportsWebP = useMemo(() => {
     if (!webp) return false
 
-    // 簡單的WebP支援檢測（可以用更複雜的邏輯）
+    // 簡單的WebP支援檢測
     return typeof window !== 'undefined' &&
       document.createElement('canvas').toDataURL('image/webp').startsWith('data:image/webp')
   }, [webp])
 
-  // 優化後的圖片 URL 獲取
-  const getOptimizedSrc = useCallback((originalSrc: string) => {
-    if (!webp || !supportsWebP) return originalSrc
+  // 優化後的圖片 URL（如果需要 WebP 轉換）
+  useMemo(() => {
+    if (!webp || !supportsWebP) return
 
-    if (originalSrc.includes('img.senen.dev')) {
+    if (src.includes('img.senen.dev')) {
       // 假設圖片伺服器支援WebP轉換
-      return originalSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp')
-    }
-
-    return originalSrc
-  }, [webp, supportsWebP])
-
-  // Intersection Observer for lazy loading
-  useEffect(() => {
-    if (!lazy || priority) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-          observer.disconnect()
-        }
-      },
-      {
-        rootMargin: '50px',
-        threshold: 0.1
+      const optimizedSrc = src.replace(/\.(jpg|jpeg|png)$/i, '.webp')
+      if (optimizedSrc !== src) {
+        setImgSrc(optimizedSrc)
       }
-    )
-
-    const currentElement = imgRef.current
-    if (currentElement) {
-      observer.observe(currentElement)
     }
-
-    return () => {
-      // 使用儲存的 element reference 而非 current ref
-      if (currentElement) {
-        observer.unobserve(currentElement)
-      }
-      // 確保完全斷開 observer 連接
-      observer.disconnect()
-    }
-  }, [lazy, priority])
-
-  // 載入圖片當可見時
-  useEffect(() => {
-    if (isInView && !imgSrc) {
-      setImgSrc(getOptimizedSrc(src))
-    }
-  }, [isInView, imgSrc, src, getOptimizedSrc])
+  }, [src, webp, supportsWebP])
 
   const handleError = () => {
     if (!hasError) {
@@ -107,7 +56,6 @@ export function ImageWithFallback({
   return (
     <div className="relative">
       <img
-        ref={imgRef}
         src={imgSrc}
         alt={alt}
         className={`transition-opacity duration-300 ${
@@ -115,7 +63,7 @@ export function ImageWithFallback({
         } ${className || ''}`}
         onError={handleError}
         onLoad={handleLoad}
-        loading={priority ? 'eager' : 'lazy'}
+        loading="eager"
         decoding="async"
       />
 

@@ -40,7 +40,6 @@ export function ContentCard({
     <Card className={`group hover:shadow-lg transition-shadow flex flex-col ${className}`}>
       {image_url && (
         <div className="aspect-video overflow-hidden rounded-t-lg flex-shrink-0">
-          {/* TODO: 優化圖片載入速度 - 考慮為卡片圖片添加優先級設定 */}
           <ImageWithFallback
             src={image_url}
             alt={title}
