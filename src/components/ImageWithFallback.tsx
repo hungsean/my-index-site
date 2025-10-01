@@ -8,6 +8,17 @@ interface ImageWithFallbackProps {
   readonly webp?: boolean
 }
 
+/**
+ * 將圖片 URL 轉換為 WebP 格式（針對 img.senen.dev）
+ */
+function getOptimizedImageUrl(src: string, webp: boolean): string {
+  if (!webp || !src.includes('img.senen.dev')) {
+    return src
+  }
+
+  return src.replace(/\.(jpg|jpeg|png)$/i, '.webp')
+}
+
 export function ImageWithFallback({
   src,
   alt,
@@ -15,31 +26,11 @@ export function ImageWithFallback({
   fallback = '/placeholder.jpg',
   webp = true
 }: ImageWithFallbackProps) {
-  const [imgSrc, setImgSrc] = useState(src)
+  // 直接使用優化後的 URL 作為初始值
+  const optimizedSrc = useMemo(() => getOptimizedImageUrl(src, webp), [src, webp])
+  const [imgSrc, setImgSrc] = useState(optimizedSrc)
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-
-  // WebP支援檢測 - 使用 useMemo 緩存結果
-  const supportsWebP = useMemo(() => {
-    if (!webp) return false
-
-    // 簡單的WebP支援檢測
-    return typeof window !== 'undefined' &&
-      document.createElement('canvas').toDataURL('image/webp').startsWith('data:image/webp')
-  }, [webp])
-
-  // 優化後的圖片 URL（如果需要 WebP 轉換）
-  useMemo(() => {
-    if (!webp || !supportsWebP) return
-
-    if (src.includes('img.senen.dev')) {
-      // 假設圖片伺服器支援WebP轉換
-      const optimizedSrc = src.replace(/\.(jpg|jpeg|png)$/i, '.webp')
-      if (optimizedSrc !== src) {
-        setImgSrc(optimizedSrc)
-      }
-    }
-  }, [src, webp, supportsWebP])
 
   const handleError = () => {
     if (!hasError) {

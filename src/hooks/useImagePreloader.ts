@@ -32,25 +32,36 @@ export function useImagePreloader(config: SiteConfig | null): UseImagePreloaderR
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  /**
+   * 將圖片 URL 轉換為 WebP 格式（針對 img.senen.dev）
+   */
+  const optimizeImageUrl = useCallback((url: string): string => {
+    if (!url.includes('img.senen.dev')) {
+      return url
+    }
+
+    return url.replace(/\.(jpg|jpeg|png)$/i, '.webp')
+  }, [])
+
   // 收集所有需要預載的圖片 URL
   const collectImageUrls = useCallback((cfg: SiteConfig): string[] => {
     const urls: string[] = []
 
     // 收集頭像
     if (cfg.profile?.avatar?.src) {
-      urls.push(cfg.profile.avatar.src)
+      urls.push(optimizeImageUrl(cfg.profile.avatar.src))
     }
 
     // 收集背景圖（如果有的話）
     if (cfg.profile?.background?.src) {
-      urls.push(cfg.profile.background.src)
+      urls.push(optimizeImageUrl(cfg.profile.background.src))
     }
 
     // 收集所有專案圖片（不限於顯示的前幾個）
     if (cfg.projects && Array.isArray(cfg.projects)) {
       cfg.projects.forEach(project => {
         if (project.image_url) {
-          urls.push(project.image_url)
+          urls.push(optimizeImageUrl(project.image_url))
         }
       })
     }
@@ -59,14 +70,14 @@ export function useImagePreloader(config: SiteConfig | null): UseImagePreloaderR
     if (cfg.games && Array.isArray(cfg.games)) {
       cfg.games.forEach(game => {
         if (game.image_url) {
-          urls.push(game.image_url)
+          urls.push(optimizeImageUrl(game.image_url))
         }
       })
     }
 
     // 去重並過濾空值
     return [...new Set(urls)].filter(url => url && url.trim() !== '')
-  }, [])
+  }, [optimizeImageUrl])
 
   // 預載單張圖片
   const preloadImage = useCallback(async (url: string): Promise<void> => {
