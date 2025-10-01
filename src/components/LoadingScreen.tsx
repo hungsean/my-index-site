@@ -1,16 +1,22 @@
 import { useSpring, motion, useTransform, AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { BsCheckCircleFill } from 'react-icons/bs'
+import { BsCheckCircleFill, BsExclamationTriangleFill } from 'react-icons/bs'
+import type { ConfigError } from '@/lib/config-loader'
 
 interface LoadingScreenProps {
   percentage: number
   onLoadComplete?: () => void
+  configErrors?: ConfigError[]
+  isDev?: boolean
 }
 
-export function LoadingScreen({ percentage, onLoadComplete }: Readonly<LoadingScreenProps>) {
+export function LoadingScreen({ percentage, onLoadComplete, configErrors = [], isDev = false }: Readonly<LoadingScreenProps>) {
   const [startTime] = useState(Date.now())
   const [showSuccess, setShowSuccess] = useState(false)
   const [isExiting, setIsExiting] = useState(false)
+
+  const hasErrors = configErrors.some(e => e.severity === 'error')
+  const hasWarnings = configErrors.some(e => e.severity === 'warning')
 
   const smoothPercentage = useSpring(0, {
     stiffness: 100,
@@ -25,6 +31,11 @@ export function LoadingScreen({ percentage, onLoadComplete }: Readonly<LoadingSc
 
   useEffect(() => {
     if (percentage >= 100) {
+      // 如果有錯誤，停在 loading 畫面不跳轉
+      if (hasErrors) {
+        return
+      }
+
       const loadTime = Date.now() - startTime
 
       // 如果載入時間超過 3 秒,顯示成功動畫
@@ -42,7 +53,7 @@ export function LoadingScreen({ percentage, onLoadComplete }: Readonly<LoadingSc
         }, 300)
       }
     }
-  }, [percentage, startTime, onLoadComplete])
+  }, [percentage, startTime, onLoadComplete, hasErrors])
 
 
   return (
@@ -154,6 +165,57 @@ export function LoadingScreen({ percentage, onLoadComplete }: Readonly<LoadingSc
             </motion.p>
           )}
         </AnimatePresence>
+
+        {/* 顯示 config 錯誤/警告（dev 模式或有 error 時） */}
+        {configErrors.length > 0 && (isDev || hasErrors) && (
+          <motion.div
+            className="mt-6 space-y-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            {hasErrors && (
+              <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <BsExclamationTriangleFill className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+                  <div className="flex-1 space-y-1">
+                    <p className="text-xs font-medium text-destructive">Config 載入錯誤</p>
+                    <div className="text-xs text-destructive/80 space-y-0.5">
+                      {configErrors
+                        .filter(e => e.severity === 'error')
+                        .slice(0, 3)
+                        .map((error) => (
+                          <p key={error.field}>• {error.field}: {error.message}</p>
+                        ))}
+                      {configErrors.filter(e => e.severity === 'error').length > 3 && (
+                        <p className="text-destructive/60">
+                          ...還有 {configErrors.filter(e => e.severity === 'error').length - 3} 個錯誤
+                        </p>
+                      )}
+                    </div>
+                    {percentage >= 100 && (
+                      <p className="text-xs text-destructive/60 mt-2 pt-2 border-t border-destructive/20">
+                        請修正錯誤後重新整理頁面
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            {hasWarnings && !hasErrors && isDev && (
+              <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <BsExclamationTriangleFill className="w-4 h-4 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-xs text-yellow-600 dark:text-yellow-400">
+                      {configErrors.filter(e => e.severity === 'warning').length} 個警告，請檢查 console
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   )
