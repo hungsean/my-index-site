@@ -102,8 +102,6 @@ function App() {
           ) : (
             <LoadingScreen
               percentage={progress.percentage}
-              loaded={progress.loaded}
-              total={progress.total}
             />
           )}
         </ThemeProvider>

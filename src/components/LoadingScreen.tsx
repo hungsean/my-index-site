@@ -1,10 +1,23 @@
+import { useSpring, motion, useTransform } from 'framer-motion'
+import { useEffect } from 'react'
+
 interface LoadingScreenProps {
   percentage: number
-  loaded: number
-  total: number
 }
 
-export function LoadingScreen({ percentage, loaded, total }: Readonly<LoadingScreenProps>) {
+export function LoadingScreen({ percentage }: Readonly<LoadingScreenProps>) {
+  const smoothPercentage = useSpring(0, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  })
+  const width = useTransform(smoothPercentage, (v) => `${v}%`)
+
+  useEffect(() => {
+    smoothPercentage.set(percentage)
+  }, [percentage, smoothPercentage])
+
+  
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
       <div className="w-full max-w-md px-8 space-y-6">
@@ -26,24 +39,16 @@ export function LoadingScreen({ percentage, loaded, total }: Readonly<LoadingScr
         {/* 進度條 */}
         <div className="space-y-2">
           <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-primary to-primary/70 transition-all duration-300 ease-out"
-              style={{ width: `${percentage}%` }}
+            <motion.div
+              className="h-full bg-gradient-to-r from-primary to-primary/70"
+              style={{ width }}
             />
-          </div>
-
-          {/* 進度文字 */}
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{percentage}%</span>
-            <span>
-              {loaded} / {total} 張圖片
-            </span>
           </div>
         </div>
 
         {/* 提示文字 */}
         <p className="text-center text-xs text-muted-foreground/60">
-          正在載入所有素材，確保最佳瀏覽體驗
+          再等一下，圖片快載好了…
         </p>
       </div>
     </div>
