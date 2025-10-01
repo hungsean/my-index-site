@@ -2,6 +2,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { useState, useEffect } from 'react'
 import { ThemeProvider, useTheme } from 'next-themes'
 import { HelmetProvider } from 'react-helmet-async'
+import { motion } from 'framer-motion'
 import type { SiteConfig } from '@/types/config'
 import { loadConfig, logConfigErrors, type ConfigError } from '@/lib/config-loader'
 import { BsMoonStars, BsSun } from "react-icons/bs"
@@ -41,6 +42,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [errors, setErrors] = useState<ConfigError[]>([])
   const [isValid, setIsValid] = useState(true)
+  const [showMainContent, setShowMainContent] = useState(false)
 
   // 圖片預載入
   const { progress, isLoading: isPreloading } = useImagePreloader(config)
@@ -88,7 +90,7 @@ function App() {
   const hasWarnings = errors.some(e => e.severity === 'warning')
 
   // 如果正在載入配置或預載圖片，顯示載入畫面
-  if (loading || isPreloading) {
+  if (loading || isPreloading || !showMainContent) {
     return (
       <HelmetProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -102,6 +104,7 @@ function App() {
           ) : (
             <LoadingScreen
               percentage={progress.percentage}
+              onLoadComplete={() => setShowMainContent(true)}
             />
           )}
         </ThemeProvider>
@@ -127,7 +130,12 @@ function App() {
   return (
     <HelmetProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="min-h-screen">
+        <motion.div
+          className="min-h-screen"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           {/* SEO結構化資料 */}
           <StructuredData config={config} />
 
@@ -180,7 +188,7 @@ function App() {
 
           {/* Toast 通知 */}
           <Toaster />
-        </div>
+        </motion.div>
       </ThemeProvider>
     </HelmetProvider>
   )
