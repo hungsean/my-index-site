@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
+import { getCachedImageUrl, getImageFallbackChain } from '@/utils/imageManager'
 
 interface ImageWithFallbackProps {
   readonly src: string
@@ -8,36 +9,44 @@ interface ImageWithFallbackProps {
   readonly webp?: boolean
 }
 
-/**
- * 將圖片 URL 轉換為 WebP 格式（針對 img.senen.dev）
- */
-function getOptimizedImageUrl(src: string, webp: boolean): string {
-  if (!webp || !src.includes('img.senen.dev')) {
-    return src
-  }
-
-  return src.replace(/\.(jpg|jpeg|png)$/i, '.webp')
-}
-
 export function ImageWithFallback({
   src,
   alt,
   className,
-  fallback = '/placeholder.jpg',
+  fallback = '/placeholder.png',
   webp = true
 }: ImageWithFallbackProps) {
-  // 直接使用優化後的 URL 作為初始值
-  const optimizedSrc = useMemo(() => getOptimizedImageUrl(src, webp), [src, webp])
-  const [imgSrc, setImgSrc] = useState(optimizedSrc)
-  const [hasError, setHasError] = useState(false)
+  // 獲取 fallback chain
+  const fallbackChain = useMemo(
+    () => (webp ? getImageFallbackChain(src, fallback) : [src, fallback]),
+    [src, fallback, webp]
+  )
+
+  // 追蹤當前嘗試的 fallback index
+  const fallbackIndexRef = useRef(0)
+
+  // 優先使用 cache 中的 URL，否則使用 fallback chain 的第一個
+  const initialSrc = useMemo(() => {
+    const cached = getCachedImageUrl(src)
+    if (cached) {
+      return cached
+    }
+    return fallbackChain[0]
+  }, [src, fallbackChain])
+
+  const [imgSrc, setImgSrc] = useState(initialSrc)
   const [isLoading, setIsLoading] = useState(true)
 
   const handleError = () => {
-    if (!hasError) {
-      setImgSrc(fallback)
-      setHasError(true)
+    // 嘗試下一個 fallback
+    fallbackIndexRef.current += 1
+
+    if (fallbackIndexRef.current < fallbackChain.length) {
+      setImgSrc(fallbackChain[fallbackIndexRef.current])
+    } else {
+      // 全部失敗，停止載入
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   const handleLoad = () => {

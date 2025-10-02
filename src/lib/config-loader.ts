@@ -28,6 +28,8 @@ function validateProfile(profile: unknown): { profile: Profile; errors: ConfigEr
   }
 
   const profileObj = profile as Record<string, unknown>
+  const backgroundSrc = (profileObj.background as Record<string, unknown>)?.src as string
+
   const validatedProfile: Profile = {
     name: typeof profileObj.name === 'string' ? profileObj.name : '千円',
     interests: typeof profileObj.interests === 'string' ? profileObj.interests : '遊戲 | 程式 | 僕咖 | 地偶',
@@ -36,9 +38,7 @@ function validateProfile(profile: unknown): { profile: Profile; errors: ConfigEr
       alt: (profileObj.avatar as Record<string, unknown>)?.alt as string || '個人頭像',
       fallback: (profileObj.avatar as Record<string, unknown>)?.fallback as string || '你'
     },
-    background: {
-      src: (profileObj.background as Record<string, unknown>)?.src as string || 'https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg'
-    }
+    ...(backgroundSrc && { background: { src: backgroundSrc } })
   }
 
   if (!profileObj.name) {
@@ -342,9 +342,6 @@ function getDefaultProfile(): Profile {
       src: "https://img.senen.dev/IMG_20240704_135615_512x512.jpg",
       alt: "個人頭像",
       fallback: "你"
-    },
-    background: {
-      src: "https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg"
     }
   }
 }

@@ -14,7 +14,7 @@ export interface Profile {
     alt: string
     fallback: string
   }
-  background: {
+  background?: {
     src: string
   }
 }
