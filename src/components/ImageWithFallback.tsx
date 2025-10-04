@@ -1,103 +1,52 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-
-// TODO: 優化圖片載入速度 - 考慮以下方向：
-// 1. 實作 Progressive JPEG 支援
-// 2. 增加圖片預載入機制 (prefetch)
-// 3. 整合 CDN 加速 (如 Cloudflare Images)
-// 4. 實作響應式圖片 (srcset, sizes)
-// 5. 增加 blur placeholder 或 LQIP (Low Quality Image Placeholder)
+import { useState, useMemo, useRef } from 'react'
+import { getCachedImageUrl, getImageFallbackChain } from '@/utils/imageManager'
 
 interface ImageWithFallbackProps {
   readonly src: string
   readonly alt: string
   readonly className?: string
   readonly fallback?: string
-  readonly lazy?: boolean
   readonly webp?: boolean
-  readonly priority?: boolean
 }
 
 export function ImageWithFallback({
   src,
   alt,
   className,
-  fallback = '/placeholder.jpg',
-  lazy = true,
-  webp = true,
-  priority = false
+  fallback = '/placeholder.png',
+  webp = true
 }: ImageWithFallbackProps) {
-  const [imgSrc, setImgSrc] = useState(priority ? src : '')
-  const [hasError, setHasError] = useState(false)
+  // 獲取 fallback chain
+  const fallbackChain = useMemo(
+    () => (webp ? getImageFallbackChain(src, fallback) : [src, fallback]),
+    [src, fallback, webp]
+  )
+
+  // 追蹤當前嘗試的 fallback index
+  const fallbackIndexRef = useRef(0)
+
+  // 優先使用 cache 中的 URL，否則使用 fallback chain 的第一個
+  const initialSrc = useMemo(() => {
+    const cached = getCachedImageUrl(src)
+    if (cached) {
+      return cached
+    }
+    return fallbackChain[0]
+  }, [src, fallbackChain])
+
+  const [imgSrc, setImgSrc] = useState(initialSrc)
   const [isLoading, setIsLoading] = useState(true)
-  const [isInView, setIsInView] = useState(!lazy || priority)
-  const imgRef = useRef<HTMLImageElement>(null)
-
-  // WebP支援檢測 - 使用 useMemo 緩存結果
-  const supportsWebP = useMemo(() => {
-    if (!webp) return false
-
-    // 簡單的WebP支援檢測（可以用更複雜的邏輯）
-    return typeof window !== 'undefined' &&
-      document.createElement('canvas').toDataURL('image/webp').startsWith('data:image/webp')
-  }, [webp])
-
-  // 優化後的圖片 URL 獲取
-  const getOptimizedSrc = useCallback((originalSrc: string) => {
-    if (!webp || !supportsWebP) return originalSrc
-
-    if (originalSrc.includes('img.senen.dev')) {
-      // 假設圖片伺服器支援WebP轉換
-      return originalSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp')
-    }
-
-    return originalSrc
-  }, [webp, supportsWebP])
-
-  // Intersection Observer for lazy loading
-  useEffect(() => {
-    if (!lazy || priority) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-          observer.disconnect()
-        }
-      },
-      {
-        rootMargin: '50px',
-        threshold: 0.1
-      }
-    )
-
-    const currentElement = imgRef.current
-    if (currentElement) {
-      observer.observe(currentElement)
-    }
-
-    return () => {
-      // 使用儲存的 element reference 而非 current ref
-      if (currentElement) {
-        observer.unobserve(currentElement)
-      }
-      // 確保完全斷開 observer 連接
-      observer.disconnect()
-    }
-  }, [lazy, priority])
-
-  // 載入圖片當可見時
-  useEffect(() => {
-    if (isInView && !imgSrc) {
-      setImgSrc(getOptimizedSrc(src))
-    }
-  }, [isInView, imgSrc, src, getOptimizedSrc])
 
   const handleError = () => {
-    if (!hasError) {
-      setImgSrc(fallback)
-      setHasError(true)
+    // 嘗試下一個 fallback
+    fallbackIndexRef.current += 1
+
+    if (fallbackIndexRef.current < fallbackChain.length) {
+      setImgSrc(fallbackChain[fallbackIndexRef.current])
+    } else {
+      // 全部失敗，停止載入
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   const handleLoad = () => {
@@ -107,7 +56,6 @@ export function ImageWithFallback({
   return (
     <div className="relative">
       <img
-        ref={imgRef}
         src={imgSrc}
         alt={alt}
         className={`transition-opacity duration-300 ${
@@ -115,7 +63,7 @@ export function ImageWithFallback({
         } ${className || ''}`}
         onError={handleError}
         onLoad={handleLoad}
-        loading={priority ? 'eager' : 'lazy'}
+        loading="eager"
         decoding="async"
       />
 

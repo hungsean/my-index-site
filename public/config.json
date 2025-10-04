@@ -3,12 +3,12 @@
     "name": "千円",
     "interests": "遊戲 | 程式 | 僕咖 | 地偶",
     "avatar": {
-      "src": "https://img.senen.dev/IMG_20240704_135615_512x512.jpg",
+      "src": "https://img.senen.dev/my-index-site-image/avatar.jpg",
       "alt": "個人頭像",
       "fallback": "你"
     },
     "background": {
-      "src": "https://img.senen.dev/background_nekopara4_Chocola_Vanilla.jpg"
+      "src": ""
     }
   },
   "socialLinks": [
@@ -95,7 +95,7 @@
         { "text": "Docker", "variant": "outline" }
       ],
       "links": [
-        { "text": "程式碼", "href": "https://github.com/message-exp/nori-web", "variant": "outline" }
+        { "name": "程式碼", "url": "https://github.com/message-exp/nori-web", "type": "link", "icon": "github", "variant": "outline" }
       ]
     },
     {
@@ -108,8 +108,8 @@
         { "text": "ESLint", "variant": "outline" }
       ],
       "links": [
-        { "text": "程式碼", "href": "https://github.com/hungsean/random-picker", "variant": "outline" },
-        { "text": "查看", "href": "https://random.senen.dev", "variant": "default" }
+        { "name": "程式碼", "url": "https://github.com/hungsean/random-picker", "type": "link", "icon": "github", "variant": "outline" },
+        { "name": "查看", "url": "https://random.senen.dev", "type": "link", "variant": "default" }
       ]
     },
     {
@@ -123,8 +123,8 @@
         { "text": "shadcn/ui", "variant": "outline" }
       ],
       "links": [
-        { "text": "程式碼", "href": "https://github.com/hungsean/my-index-site", "variant": "outline" },
-        { "text": "查看", "href": "https://www.senen.dev", "variant": "default" }
+        { "name": "程式碼", "url": "https://github.com/hungsean/my-index-site", "type": "link", "icon": "github", "variant": "outline" },
+        { "name": "查看", "url": "https://www.senen.dev", "type": "link", "variant": "default" }
       ]
     }
   ],
@@ -132,55 +132,55 @@
     {
       "title": "碧藍航線",
       "description": "理論上是個彈幕射擊的艦娘遊戲，但本體是肝船和賣瑟瑟的造型。",
-      "image_url": "https://img.senen.dev/web/azuelane_laffey.png",
+      "image_url": "https://img.senen.dev/my-index-site-image/azuelane_laffey.jpg",
       "tags": [
         { "text": "RPG", "variant": "secondary" },
         { "text": "Mobile", "variant": "outline" },
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "text": "官方網站", "href": "https://www.azurlane.tw", "variant": "outline" }
+        { "name": "官方網站", "url": "https://www.azurlane.tw", "type": "link", "variant": "outline" }
       ]
     },
     {
       "title": "学園アイドルマスター",
       "description": "養偶像遊戲，順帶一提花海咲季我推！",
-      "image_url": "https://img.senen.dev/web/gakumas_hanami_saki.png",
+      "image_url": "https://img.senen.dev/my-index-site-image/gakumas_hanami_saki.jpg",
       "tags": [
         { "text": "RPG", "variant": "secondary" },
         { "text": "DMM/Mobile", "variant": "outline" },
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "text": "官方網站", "href": "https://gakuen.idolmaster-official.jp", "variant": "outline" }
+        { "name": "官方網站", "url": "https://gakuen.idolmaster-official.jp", "type": "link", "variant": "outline" }
       ]
     },
     {
       "title": "劍星",
       "description": "動作冒險兼換裝遊戲",
-      "image_url": "https://img.senen.dev/web/stellar_blade.jpg",
+      "image_url": "https://img.senen.dev/my-index-site-image/stellar_blade.jpg",
       "tags": [
         { "text": "Action", "variant": "secondary" },
         { "text": "PS5 / PC", "variant": "outline" },
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "text": "Steam", "href": "https://store.steampowered.com/app/3489700/_/", "variant": "outline" },
-        { "text": "PlayStation", "href": "https://www.playstation.com/en-us/games/stellar-blade/", "variant": "outline" }
+        { "name": "Steam", "url": "https://store.steampowered.com/app/3489700/_/", "type": "link", "variant": "outline" },
+        { "name": "PlayStation", "url": "https://www.playstation.com/en-us/games/stellar-blade/", "type": "link", "variant": "outline" }
       ]
     },
     {
       "title": "死亡擱淺",
       "description": "小島秀夫的神，無需多言。",
-      "image_url": "https://img.senen.dev/web/death_stranding.jpg",
+      "image_url": "https://img.senen.dev/my-index-site-image/death_stranding.jpg",
       "tags": [
         { "text": "Walking", "variant": "secondary" },
         { "text": "PC / PS5", "variant": "outline" },
         { "text": "已完成", "variant": "secondary" }
       ],
       "links": [
-        { "text": "Steam", "href": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/", "variant": "outline" },
-        { "text": "官方網站", "href": "https://deathstrandingpc.505games.com/zh-hant/", "variant": "outline" }
+        { "name": "Steam", "url": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/", "type": "link", "variant": "outline" },
+        { "name": "官方網站", "url": "https://deathstrandingpc.505games.com/zh-hant/", "type": "link", "variant": "outline" }
       ]
     }
   ]

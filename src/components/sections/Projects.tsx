@@ -1,15 +1,13 @@
 import { Button } from '@/components/ui/button'
-import { ContentCard, type Tag, type Link } from '../ContentCard'
+import { ContentCard, type Tag } from '../ContentCard'
 import type { SiteConfig } from '@/types/config'
 import { useState, useMemo } from 'react'
-import { validateUrl } from '@/lib/url-validation'
 
 interface ProjectsProps {
   config: SiteConfig
 }
 
-
-export function Projects({ config }: ProjectsProps) {
+export function Projects({ config }: Readonly<ProjectsProps>) {
   const [showAll, setShowAll] = useState(false)
   
   // 使用 useMemo 緩存預設專案，避免每次渲染重新創建
@@ -25,8 +23,8 @@ export function Projects({ config }: ProjectsProps) {
         { text: "Stripe", variant: "outline" }
       ],
       links: [
-        { text: "代碼", href: "#", variant: "outline" },
-        { text: "查看", href: "#", variant: "default" }
+        { name: "代碼", url: "#", type: "link" as const, variant: "outline" as const },
+        { name: "查看", url: "#", type: "link" as const, variant: "default" as const }
       ]
     },
     {
@@ -40,8 +38,8 @@ export function Projects({ config }: ProjectsProps) {
         { text: "Socket.io", variant: "outline" }
       ],
       links: [
-        { text: "代碼", href: "#", variant: "outline" },
-        { text: "查看", href: "#", variant: "default" }
+        { name: "代碼", url: "#", type: "link" as const, variant: "outline" as const },
+        { name: "查看", url: "#", type: "link" as const, variant: "default" as const }
       ]
     },
     {
@@ -54,8 +52,8 @@ export function Projects({ config }: ProjectsProps) {
         { text: "Weather API", variant: "outline" }
       ],
       links: [
-        { text: "代碼", href: "#", variant: "outline" },
-        { text: "查看", href: "#", variant: "default" }
+        { name: "代碼", url: "#", type: "link" as const, variant: "outline" as const },
+        { name: "查看", url: "#", type: "link" as const, variant: "default" as const }
       ]
     }
   ], [])
@@ -64,23 +62,10 @@ export function Projects({ config }: ProjectsProps) {
   const processedProjects = useMemo(() => {
     const projects = config.projects || defaultProjects
 
-    // 驗證每個項目的 URL
-    const validatedProjects = projects.map(project => ({
-      ...project,
-      links: project.links?.map(link => {
-        const validation = validateUrl(link.href)
-        if (!validation.isValid || !validation.isSafe) {
-          console.warn(`Invalid URL in project "${project.title}":`, link.href, validation.error)
-          return { ...link, href: '#', disabled: true }
-        }
-        return link
-      }) || []
-    }))
-
     return {
-      projects: validatedProjects,
-      displayProjects: showAll ? validatedProjects : validatedProjects.slice(0, 3),
-      hasMoreProjects: validatedProjects.length > 3
+      projects,
+      displayProjects: showAll ? projects : projects.slice(0, 3),
+      hasMoreProjects: projects.length > 3
     }
   }, [config.projects, showAll, defaultProjects])
 
@@ -99,19 +84,11 @@ export function Projects({ config }: ProjectsProps) {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {processedProjects.displayProjects.map((project, index) => {
-            // 直接處理 tags 和 links 轉換，不在 map 中使用 useMemo
+            // 直接處理 tags 轉換
             const contentCardTags: Tag[] = project.tags?.map((tag: { text: string; variant?: string; style?: string }) => ({
               content: tag.text,
               variant: (tag.variant as Tag['variant']) || 'outline',
               style: (tag.style as Tag['style']) || 'small'
-            })) || []
-
-            const contentCardLinks: Link[] = project.links?.map((link: { text: string; href: string; variant?: string; size?: string; disabled?: boolean }) => ({
-              content: link.text,
-              href: link.href,
-              variant: (link.variant as Link['variant']) || 'outline',
-              size: (link.size as Link['size']) || 'sm',
-              disabled: link.disabled
             })) || []
 
             return (
@@ -121,7 +98,7 @@ export function Projects({ config }: ProjectsProps) {
                 title={project.title}
                 description={project.description}
                 tags={contentCardTags}
-                links={contentCardLinks}
+                links={project.links}
               />
             )
           })}

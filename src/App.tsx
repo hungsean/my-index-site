@@ -2,6 +2,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { useState, useEffect } from 'react'
 import { ThemeProvider, useTheme } from 'next-themes'
 import { HelmetProvider } from 'react-helmet-async'
+import { motion } from 'framer-motion'
 import type { SiteConfig } from '@/types/config'
 import { loadConfig, logConfigErrors, type ConfigError } from '@/lib/config-loader'
 import { BsMoonStars, BsSun } from "react-icons/bs"
@@ -13,6 +14,8 @@ import { Contact } from './components/sections/Contact'
 import { Button } from '@/components/ui/button'
 import { StructuredData } from './components/StructuredData'
 import ErrorBoundary from './components/ErrorBoundary'
+import { useImagePreloader } from '@/hooks/useImagePreloader'
+import { LoadingScreen } from '@/components/LoadingScreen'
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -38,7 +41,10 @@ function App() {
   const [config, setConfig] = useState<SiteConfig | null>(null)
   const [loading, setLoading] = useState(true)
   const [errors, setErrors] = useState<ConfigError[]>([])
-  const [isValid, setIsValid] = useState(true)
+  const [showMainContent, setShowMainContent] = useState(false)
+
+  // 圖片預載入
+  const { progress, isLoading: isPreloading } = useImagePreloader(config)
 
   // 載入配置文件
   useEffect(() => {
@@ -48,8 +54,7 @@ function App() {
         const result = await loadConfig()
         setConfig(result.config)
         setErrors(result.errors)
-        setIsValid(result.isValid)
-        
+
         // 在開發模式下記錄錯誤和警告
         logConfigErrors(result.errors)
       } catch (err) {
@@ -59,7 +64,6 @@ function App() {
           message: err instanceof Error ? err.message : '未知錯誤',
           severity: 'error'
         }])
-        setIsValid(false)
       } finally {
         setLoading(false)
       }
@@ -68,31 +72,26 @@ function App() {
     loadAppConfig()
   }, [])
 
-  // 獲取錯誤訊息顯示
-  const getErrorMessage = () => {
-    const errorMessages = errors.filter(e => e.severity === 'error')
-    if (errorMessages.length === 0) return null
-    
-    if (errorMessages.length === 1) {
-      return errorMessages[0].message
-    }
-    
-    return `發現 ${errorMessages.length} 個配置錯誤`
-  }
-
-  const hasWarnings = errors.some(e => e.severity === 'warning')
-
-  // 如果正在載入，顯示載入動畫
-  if (loading) {
+  // 如果正在載入配置或預載圖片，顯示載入畫面
+  if (loading || isPreloading || !showMainContent) {
     return (
       <HelmetProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="text-center space-y-4">
-              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="text-muted-foreground">載入中...</p>
+          {loading ? (
+            <div className="min-h-screen flex items-center justify-center p-4">
+              <div className="text-center space-y-4">
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                <p className="text-muted-foreground">載入設定檔...</p>
+              </div>
             </div>
-          </div>
+          ) : (
+            <LoadingScreen
+              percentage={progress.percentage}
+              onLoadComplete={() => setShowMainContent(true)}
+              configErrors={errors}
+              isDev={import.meta.env.DEV}
+            />
+          )}
         </ThemeProvider>
       </HelmetProvider>
     )
@@ -116,35 +115,17 @@ function App() {
   return (
     <HelmetProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="min-h-screen">
+        <motion.div
+          className="min-h-screen"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           {/* SEO結構化資料 */}
           <StructuredData config={config} />
 
           {/* 主題切換按鈕 */}
           <ThemeToggle />
-
-          {/* 錯誤和警告提示 */}
-          {getErrorMessage() && (
-            <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 p-3 bg-destructive/10 border border-destructive/20 rounded-lg max-w-md">
-              <p className="text-sm text-destructive text-center">
-                {getErrorMessage()}
-              </p>
-              {!isValid && (
-                <p className="text-xs text-muted-foreground text-center mt-1">
-                  使用預設配置或部分功能可能受影響
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* 開發模式警告提示 */}
-          {hasWarnings && import.meta.env.DEV && (
-            <div className="fixed top-32 left-1/2 transform -translate-x-1/2 z-40 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg max-w-md">
-              <p className="text-xs text-yellow-600 dark:text-yellow-400 text-center">
-                配置有警告，請檢查控制台
-              </p>
-            </div>
-          )}
 
           {/* 主要內容區域 - 使用 Error Boundary 保護每個 section */}
           <ErrorBoundary name="Hero Section">
@@ -169,7 +150,7 @@ function App() {
 
           {/* Toast 通知 */}
           <Toaster />
-        </div>
+        </motion.div>
       </ThemeProvider>
     </HelmetProvider>
   )

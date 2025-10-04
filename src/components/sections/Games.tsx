@@ -1,8 +1,7 @@
 import { Button } from '@/components/ui/button'
-import { ContentCard, type Tag, type Link } from '../ContentCard'
+import { ContentCard, type Tag } from '../ContentCard'
 import type { SiteConfig } from '@/types/config'
 import { useState, useMemo } from 'react'
-import { validateUrl } from '@/lib/url-validation'
 
 interface GamesProps {
   config: SiteConfig
@@ -24,7 +23,7 @@ export function Games({ config }: GamesProps) {
         { text: "正在遊玩", variant: "default" }
       ],
       links: [
-        { text: "官方網站", href: "https://genshin.mihoyo.com/", variant: "outline" }
+        { name: "官方網站", url: "https://genshin.mihoyo.com/", type: "link" as const, variant: "outline" as const }
       ]
     },
     {
@@ -37,7 +36,7 @@ export function Games({ config }: GamesProps) {
         { text: "長期遊玩", variant: "secondary" }
       ],
       links: [
-        { text: "官方網站", href: "https://www.leagueoflegends.com/", variant: "outline" }
+        { name: "官方網站", url: "https://www.leagueoflegends.com/", type: "link" as const, variant: "outline" as const }
       ]
     },
     {
@@ -66,23 +65,10 @@ export function Games({ config }: GamesProps) {
   const processedGames = useMemo(() => {
     const games = config.games || defaultGames
 
-    // 驗證每個遊戲的 URL
-    const validatedGames = games.map(game => ({
-      ...game,
-      links: game.links?.map(link => {
-        const validation = validateUrl(link.href)
-        if (!validation.isValid || !validation.isSafe) {
-          console.warn(`Invalid URL in game "${game.title}":`, link.href, validation.error)
-          return { ...link, href: '#', disabled: true }
-        }
-        return link
-      }) || []
-    }))
-
     return {
-      games: validatedGames,
-      displayGames: showAll ? validatedGames : validatedGames.slice(0, 4),
-      hasMoreGames: validatedGames.length > 4
+      games,
+      displayGames: showAll ? games : games.slice(0, 4),
+      hasMoreGames: games.length > 4
     }
   }, [config.games, showAll, defaultGames])
 
@@ -101,19 +87,11 @@ export function Games({ config }: GamesProps) {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {processedGames.displayGames.map((game, index) => {
-            // 直接處理 tags 和 links 轉換，不在 map 中使用 useMemo
+            // 直接處理 tags 轉換
             const contentCardTags: Tag[] = game.tags?.map((tag: { text: string; variant?: string; style?: string }) => ({
               content: tag.text,
               variant: (tag.variant as Tag['variant']) || 'outline',
               style: (tag.style as Tag['style']) || 'small'
-            })) || []
-
-            const contentCardLinks: Link[] = game.links?.map((link: { text: string; href: string; variant?: string; size?: string; disabled?: boolean }) => ({
-              content: link.text,
-              href: link.href,
-              variant: (link.variant as Link['variant']) || 'outline',
-              size: (link.size as Link['size']) || 'sm',
-              disabled: link.disabled
             })) || []
 
             return (
@@ -123,7 +101,7 @@ export function Games({ config }: GamesProps) {
                 title={game.title}
                 description={game.description}
                 tags={contentCardTags}
-                links={contentCardLinks}
+                links={game.links}
               />
             )
           })}
