@@ -139,8 +139,7 @@
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "name": "官方網站", "url": "https://www.azurlane.tw", "type": "link", "variant": "outline" },
-        { "name": "UID", "url": "1234567", "type":"copy", "variant":"default"}
+        { "name": "官方網站", "url": "https://www.azurlane.tw", "type": "link", "variant": "outline" }
       ]
     },
     {
