@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { LinksButton } from '@/components/LinksButton'
+import { getCachedImageUrl } from '@/utils/imageManager'
 import type { SiteConfig } from '@/types/config'
 
 interface HeroProps {
@@ -8,16 +9,18 @@ interface HeroProps {
 }
 
 export function Hero({ config }: Readonly<HeroProps>) {
+  // 使用預載時成功的 URL（通常是 WebP），如果沒有 cache 則用原始 URL
+  const avatarSrc = getCachedImageUrl(config.profile.avatar.src) || config.profile.avatar.src
+
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/20 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
             {/* 頭像區域 */}
-            {/* TODO: 優化圖片載入速度 - 頭像為首屏關鍵元素，應設定為 priority 預載 */}
             <div className="mb-6 flex justify-center">
               <Avatar className="w-24 h-24 sm:w-28 md:w-32 sm:h-28 md:h-32 ring-4 ring-primary/20">
                 <AvatarImage
-                  src={config.profile.avatar.src}
+                  src={avatarSrc}
                   alt={config.profile.avatar.alt}
                   className="object-cover"
                 />

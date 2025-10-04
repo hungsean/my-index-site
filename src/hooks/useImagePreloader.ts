@@ -17,7 +17,7 @@ interface UseImagePreloaderReturn {
 
 // 測試用：開發模式下每張圖片載入後的延遲時間（毫秒）
 // 正式環境請設為 0
-const DEV_DELAY_MS = import.meta.env.DEV ? 2000 : 0
+const DEV_DELAY_MS = import.meta.env.DEV ? 1 : 0
 
 /**
  * 圖片預載入 Hook
