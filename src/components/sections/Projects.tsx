@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button'
 import { ContentCard, type Tag } from '../ContentCard'
 import type { SiteConfig } from '@/types/config'
 import { useState, useMemo } from 'react'
-import { validateUrl } from '@/lib/url-validation'
 
 interface ProjectsProps {
   config: SiteConfig
@@ -24,8 +23,8 @@ export function Projects({ config }: Readonly<ProjectsProps>) {
         { text: "Stripe", variant: "outline" }
       ],
       links: [
-        { text: "代碼", href: "#", variant: "outline" as const },
-        { text: "查看", href: "#", variant: "default" as const }
+        { name: "代碼", url: "#", type: "link" as const, variant: "outline" as const },
+        { name: "查看", url: "#", type: "link" as const, variant: "default" as const }
       ]
     },
     {
@@ -39,8 +38,8 @@ export function Projects({ config }: Readonly<ProjectsProps>) {
         { text: "Socket.io", variant: "outline" }
       ],
       links: [
-        { text: "代碼", href: "#", variant: "outline" as const },
-        { text: "查看", href: "#", variant: "default" as const }
+        { name: "代碼", url: "#", type: "link" as const, variant: "outline" as const },
+        { name: "查看", url: "#", type: "link" as const, variant: "default" as const }
       ]
     },
     {
@@ -53,8 +52,8 @@ export function Projects({ config }: Readonly<ProjectsProps>) {
         { text: "Weather API", variant: "outline" }
       ],
       links: [
-        { text: "代碼", href: "#", variant: "outline" as const },
-        { text: "查看", href: "#", variant: "default" as const }
+        { name: "代碼", url: "#", type: "link" as const, variant: "outline" as const },
+        { name: "查看", url: "#", type: "link" as const, variant: "default" as const }
       ]
     }
   ], [])
@@ -63,34 +62,10 @@ export function Projects({ config }: Readonly<ProjectsProps>) {
   const processedProjects = useMemo(() => {
     const projects = config.projects || defaultProjects
 
-    // 驗證每個項目的 URL
-    const validatedProjects = projects.map(project => ({
-      ...project,
-      links: project.links?.map(link => {
-        // 類型保護：檢查是否為舊版格式
-        if ('href' in link && link.href) {
-          const validation = validateUrl(link.href)
-          if (!validation.isValid || !validation.isSafe) {
-            console.warn(`Invalid URL in project "${project.title}":`, link.href, validation.error)
-            return { ...link, href: '#', disabled: true }
-          }
-        }
-        // 類型保護：檢查是否為新版格式
-        if ('url' in link && link.url && link.type === 'link') {
-          const validation = validateUrl(link.url)
-          if (!validation.isValid || !validation.isSafe) {
-            console.warn(`Invalid URL in project "${project.title}":`, link.url, validation.error)
-            return { ...link, url: '#', disabled: true }
-          }
-        }
-        return link
-      }) || []
-    }))
-
     return {
-      projects: validatedProjects,
-      displayProjects: showAll ? validatedProjects : validatedProjects.slice(0, 3),
-      hasMoreProjects: validatedProjects.length > 3
+      projects,
+      displayProjects: showAll ? projects : projects.slice(0, 3),
+      hasMoreProjects: projects.length > 3
     }
   }, [config.projects, showAll, defaultProjects])
 

@@ -1,4 +1,5 @@
-import type { SiteConfig, Profile, SocialLink, About, ContentItem, LegacyContentLink, UnifiedLink } from '@/types/config'
+import type { SiteConfig, Profile, SocialLink, About, ContentItem } from '@/types/config'
+import { validateUrl } from './url-validation'
 
 export interface ConfigError {
   field: string
@@ -175,7 +176,7 @@ function validateTags(tags: unknown, fieldName: string): { errors: ConfigError[]
 }
 
 /**
- * 驗證連結陣列 - 支援新舊兩種格式,僅檢查不做轉換
+ * 驗證連結陣列 - 僅支援 UnifiedLink 格式
  */
 function validateLinks(links: unknown, fieldName: string): { errors: ConfigError[] } {
   const errors: ConfigError[] = []
@@ -202,65 +203,41 @@ function validateLinks(links: unknown, fieldName: string): { errors: ConfigError
 
     const linkObj = link as Record<string, unknown>
 
-    // 檢查是新版格式 (name + url + type) 還是舊版格式 (text + href)
-    const isNewFormat = 'name' in linkObj && 'url' in linkObj && 'type' in linkObj
-    const isOldFormat = 'text' in linkObj && 'href' in linkObj
-
-    if (!isNewFormat && !isOldFormat) {
+    if (!linkObj.name || typeof linkObj.name !== 'string') {
       errors.push({
-        field: `${fieldName}[${index}]`,
-        message: '連結必須包含 (name, url, type) 或 (text, href) 欄位',
+        field: `${fieldName}[${index}].name`,
+        message: '連結必須包含有效的 name 欄位',
+        severity: 'error'
+      })
+      return
+    }
+    if (!linkObj.url || typeof linkObj.url !== 'string') {
+      errors.push({
+        field: `${fieldName}[${index}].url`,
+        message: '連結必須包含有效的 url 欄位',
+        severity: 'error'
+      })
+      return
+    }
+    if (!['link', 'copy', 'text'].includes(linkObj.type as string)) {
+      errors.push({
+        field: `${fieldName}[${index}].type`,
+        message: 'type 必須是 link, copy, 或 text',
         severity: 'error'
       })
       return
     }
 
-    // 新版格式驗證
-    if (isNewFormat) {
-      if (!linkObj.name || typeof linkObj.name !== 'string') {
-        errors.push({
-          field: `${fieldName}[${index}].name`,
-          message: '連結必須包含有效的 name 欄位',
-          severity: 'error'
-        })
-        return
-      }
-      if (!linkObj.url || typeof linkObj.url !== 'string') {
+    // 僅對 type: 'link' 進行 URL 驗證
+    if (linkObj.type === 'link') {
+      const validation = validateUrl(linkObj.url as string)
+      if (!validation.isValid || !validation.isSafe) {
         errors.push({
           field: `${fieldName}[${index}].url`,
-          message: '連結必須包含有效的 url 欄位',
-          severity: 'error'
+          message: `無效或不安全的 URL: ${validation.error}`,
+          severity: 'warning'
         })
-        return
       }
-      if (!['link', 'copy', 'text'].includes(linkObj.type as string)) {
-        errors.push({
-          field: `${fieldName}[${index}].type`,
-          message: 'type 必須是 link, copy, 或 text',
-          severity: 'error'
-        })
-        return
-      }
-      return
-    }
-
-    // 舊版格式驗證
-    if (!linkObj.text || typeof linkObj.text !== 'string') {
-      errors.push({
-        field: `${fieldName}[${index}].text`,
-        message: '連結必須包含有效的 text 欄位',
-        severity: 'error'
-      })
-      return
-    }
-
-    if (!linkObj.href || typeof linkObj.href !== 'string') {
-      errors.push({
-        field: `${fieldName}[${index}].href`,
-        message: '連結必須包含有效的 href 欄位',
-        severity: 'error'
-      })
-      return
     }
   })
 

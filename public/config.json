@@ -109,7 +109,7 @@
       ],
       "links": [
         { "name": "程式碼", "url": "https://github.com/hungsean/random-picker", "type": "link", "icon": "github", "variant": "outline" },
-        { "name": "查看", "url": "https://random.senen.dev", "type": "link", "icon": "globe", "variant": "default" }
+        { "name": "查看", "url": "https://random.senen.dev", "type": "link", "variant": "default" }
       ]
     },
     {
@@ -124,7 +124,7 @@
       ],
       "links": [
         { "name": "程式碼", "url": "https://github.com/hungsean/my-index-site", "type": "link", "icon": "github", "variant": "outline" },
-        { "name": "查看", "url": "https://www.senen.dev", "type": "link", "icon": "globe", "variant": "default" }
+        { "name": "查看", "url": "https://www.senen.dev", "type": "link", "variant": "default" }
       ]
     }
   ],
@@ -139,7 +139,8 @@
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "name": "官方網站", "url": "https://www.azurlane.tw", "type": "link", "icon": "globe", "variant": "outline" }
+        { "name": "官方網站", "url": "https://www.azurlane.tw", "type": "link", "variant": "outline" },
+        { "name": "UID", "url": "1234567", "type":"copy", "variant":"default"}
       ]
     },
     {
@@ -152,7 +153,7 @@
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "name": "官方網站", "url": "https://gakuen.idolmaster-official.jp", "type": "link", "icon": "globe", "variant": "outline" }
+        { "name": "官方網站", "url": "https://gakuen.idolmaster-official.jp", "type": "link", "variant": "outline" }
       ]
     },
     {
@@ -165,8 +166,8 @@
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "name": "Steam", "url": "https://store.steampowered.com/app/3489700/_/", "type": "link", "icon": "globe", "variant": "outline" },
-        { "name": "PlayStation", "url": "https://www.playstation.com/en-us/games/stellar-blade/", "type": "link", "icon": "globe", "variant": "outline" }
+        { "name": "Steam", "url": "https://store.steampowered.com/app/3489700/_/", "type": "link", "variant": "outline" },
+        { "name": "PlayStation", "url": "https://www.playstation.com/en-us/games/stellar-blade/", "type": "link", "variant": "outline" }
       ]
     },
     {
@@ -179,8 +180,8 @@
         { "text": "已完成", "variant": "secondary" }
       ],
       "links": [
-        { "name": "Steam", "url": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/", "type": "link", "icon": "globe", "variant": "outline" },
-        { "name": "官方網站", "url": "https://deathstrandingpc.505games.com/zh-hant/", "type": "link", "icon": "globe", "variant": "outline" }
+        { "name": "Steam", "url": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/", "type": "link", "variant": "outline" },
+        { "name": "官方網站", "url": "https://deathstrandingpc.505games.com/zh-hant/", "type": "link", "variant": "outline" }
       ]
     }
   ]

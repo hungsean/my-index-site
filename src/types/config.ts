@@ -37,14 +37,6 @@ export interface Profile {
   }
 }
 
-// 舊版 ContentItem Link 格式（向後相容）
-export interface LegacyContentLink {
-  text: string
-  href: string
-  variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'link'
-  size?: 'default' | 'sm' | 'lg'
-}
-
 // 統一的內容項目介面 (用於 projects 和 games)
 export interface ContentItem {
   title: string
@@ -55,8 +47,7 @@ export interface ContentItem {
     variant?: 'default' | 'secondary' | 'outline' | 'destructive'
     style?: 'normal' | 'small'
   }>
-  // 支援舊版格式和新版統一格式
-  links?: Array<LegacyContentLink | UnifiedLink>
+  links?: UnifiedLink[]
 }
 
 export interface About {

@@ -1,8 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { ContentCard, type Tag } from '../ContentCard'
-import type { SiteConfig, LegacyContentLink } from '@/types/config'
+import type { SiteConfig } from '@/types/config'
 import { useState, useMemo } from 'react'
-import { validateUrl } from '@/lib/url-validation'
 
 interface GamesProps {
   config: SiteConfig
@@ -24,7 +23,7 @@ export function Games({ config }: GamesProps) {
         { text: "正在遊玩", variant: "default" }
       ],
       links: [
-        { text: "官方網站", href: "https://genshin.mihoyo.com/", variant: "outline" }
+        { name: "官方網站", url: "https://genshin.mihoyo.com/", type: "link" as const, variant: "outline" as const }
       ]
     },
     {
@@ -37,7 +36,7 @@ export function Games({ config }: GamesProps) {
         { text: "長期遊玩", variant: "secondary" }
       ],
       links: [
-        { text: "官方網站", href: "https://www.leagueoflegends.com/", variant: "outline" }
+        { name: "官方網站", url: "https://www.leagueoflegends.com/", type: "link" as const, variant: "outline" as const }
       ]
     },
     {
@@ -66,32 +65,10 @@ export function Games({ config }: GamesProps) {
   const processedGames = useMemo(() => {
     const games = config.games || defaultGames
 
-    // 驗證每個遊戲的 URL (使用 LegacyContentLink 格式)
-    const validatedGames = games.map(game => ({
-      ...game,
-      links: game.links?.map((link): LegacyContentLink => {
-        const href = typeof link === 'object' && 'href' in link ? link.href : '#'
-        const text = typeof link === 'object' && 'text' in link ? link.text : '連結'
-        const variant = typeof link === 'object' && 'variant' in link
-          ? link.variant as LegacyContentLink['variant']
-          : undefined
-        const size = typeof link === 'object' && 'size' in link
-          ? link.size as LegacyContentLink['size']
-          : undefined
-
-        const validation = validateUrl(href)
-        if (!validation.isValid || !validation.isSafe) {
-          console.warn(`Invalid URL in game "${game.title}":`, href, validation.error)
-          return { text, href: '#', variant, size }
-        }
-        return { text, href, variant, size }
-      }) || []
-    }))
-
     return {
-      games: validatedGames,
-      displayGames: showAll ? validatedGames : validatedGames.slice(0, 4),
-      hasMoreGames: validatedGames.length > 4
+      games,
+      displayGames: showAll ? games : games.slice(0, 4),
+      hasMoreGames: games.length > 4
     }
   }, [config.games, showAll, defaultGames])
 
@@ -124,7 +101,7 @@ export function Games({ config }: GamesProps) {
                 title={game.title}
                 description={game.description}
                 tags={contentCardTags}
-                links={game.links as LegacyContentLink[]}
+                links={game.links}
               />
             )
           })}
