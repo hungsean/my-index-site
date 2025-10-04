@@ -14,6 +14,7 @@ export function LoadingScreen({ percentage, onLoadComplete, configErrors = [], i
   const [startTime] = useState(Date.now())
   const [showSuccess, setShowSuccess] = useState(false)
   const [isExiting, setIsExiting] = useState(false)
+  const [shouldRender, setShouldRender] = useState(false)
 
   const hasErrors = configErrors.some(e => e.severity === 'error')
   const hasWarnings = configErrors.some(e => e.severity === 'warning')
@@ -29,6 +30,14 @@ export function LoadingScreen({ percentage, onLoadComplete, configErrors = [], i
     smoothPercentage.set(percentage)
   }, [percentage, smoothPercentage])
 
+  // 1 秒後才顯示載入畫面
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShouldRender(true)
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [])
+
   useEffect(() => {
     if (percentage >= 100) {
       // 如果有錯誤，停在 loading 畫面不跳轉
@@ -38,23 +47,35 @@ export function LoadingScreen({ percentage, onLoadComplete, configErrors = [], i
 
       const loadTime = Date.now() - startTime
 
-      // 如果載入時間超過 3 秒,顯示成功動畫
-      if (loadTime > 2000) {
-        setShowSuccess(true)
-        setTimeout(() => {
-          setIsExiting(true)
-          setTimeout(() => onLoadComplete?.(), 800)
-        }, 1200)
-      } else {
-        // 否則直接過場
+      // < 1s: 直接進入（不顯示載入畫面）
+      if (loadTime < 1000) {
+        onLoadComplete?.()
+        return
+      }
+
+      // 1-2s: 顯示載入畫面但直接離開
+      if (loadTime < 3000) {
         setTimeout(() => {
           setIsExiting(true)
           setTimeout(() => onLoadComplete?.(), 800)
         }, 300)
+        return
       }
+
+      // > 2s: 顯示成功動畫
+      setShowSuccess(true)
+      setTimeout(() => {
+        setIsExiting(true)
+        setTimeout(() => onLoadComplete?.(), 800)
+      }, 1200)
     }
   }, [percentage, startTime, onLoadComplete, hasErrors])
 
+
+  // 1 秒內或有錯誤時不顯示載入畫面
+  if (!shouldRender && !hasErrors) {
+    return null
+  }
 
   return (
     <motion.div
