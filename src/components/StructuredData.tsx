@@ -106,8 +106,8 @@ export function StructuredData({ config }: StructuredDataProps) {
       "url": "https://senen.dev"
     },
     "programmingLanguage": project.tags?.map(tag => tag.text) || [],
-    "url": project.links?.find(link => link.text === "查看")?.href,
-    "codeRepository": project.links?.find(link => link.text === "程式碼")?.href,
+    "url": project.links?.find(link => link.name === "查看")?.url,
+    "codeRepository": project.links?.find(link => link.name === "程式碼")?.url,
     "applicationCategory": "WebApplication",
     "operatingSystem": "Any"
   })) || []
@@ -120,7 +120,7 @@ export function StructuredData({ config }: StructuredDataProps) {
     "description": game.description,
     "image": game.image_url,
     "genre": game.tags?.map(tag => tag.text) || [],
-    "url": game.links?.find(link => link.href)?.href,
+    "url": game.links?.find(link => link.url)?.url,
     "gamePlatform": game.tags
       ?.filter(tag => tag.text.includes('/') || ['Mobile', 'PC', 'PS5'].includes(tag.text))
       .map(tag => tag.text) || [],
