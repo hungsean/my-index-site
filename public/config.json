@@ -95,7 +95,7 @@
         { "text": "Docker", "variant": "outline" }
       ],
       "links": [
-        { "text": "程式碼", "href": "https://github.com/message-exp/nori-web", "variant": "outline" }
+        { "name": "程式碼", "url": "https://github.com/message-exp/nori-web", "type": "link", "icon": "github", "variant": "outline" }
       ]
     },
     {
@@ -108,8 +108,8 @@
         { "text": "ESLint", "variant": "outline" }
       ],
       "links": [
-        { "text": "程式碼", "href": "https://github.com/hungsean/random-picker", "variant": "outline" },
-        { "text": "查看", "href": "https://random.senen.dev", "variant": "default" }
+        { "name": "程式碼", "url": "https://github.com/hungsean/random-picker", "type": "link", "icon": "github", "variant": "outline" },
+        { "name": "查看", "url": "https://random.senen.dev", "type": "link", "icon": "globe", "variant": "default" }
       ]
     },
     {
@@ -123,8 +123,8 @@
         { "text": "shadcn/ui", "variant": "outline" }
       ],
       "links": [
-        { "text": "程式碼", "href": "https://github.com/hungsean/my-index-site", "variant": "outline" },
-        { "text": "查看", "href": "https://www.senen.dev", "variant": "default" }
+        { "name": "程式碼", "url": "https://github.com/hungsean/my-index-site", "type": "link", "icon": "github", "variant": "outline" },
+        { "name": "查看", "url": "https://www.senen.dev", "type": "link", "icon": "globe", "variant": "default" }
       ]
     }
   ],
@@ -139,7 +139,7 @@
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "text": "官方網站", "href": "https://www.azurlane.tw", "variant": "outline" }
+        { "name": "官方網站", "url": "https://www.azurlane.tw", "type": "link", "icon": "globe", "variant": "outline" }
       ]
     },
     {
@@ -152,7 +152,7 @@
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "text": "官方網站", "href": "https://gakuen.idolmaster-official.jp", "variant": "outline" }
+        { "name": "官方網站", "url": "https://gakuen.idolmaster-official.jp", "type": "link", "icon": "globe", "variant": "outline" }
       ]
     },
     {
@@ -165,8 +165,8 @@
         { "text": "正在遊玩", "variant": "default" }
       ],
       "links": [
-        { "text": "Steam", "href": "https://store.steampowered.com/app/3489700/_/", "variant": "outline" },
-        { "text": "PlayStation", "href": "https://www.playstation.com/en-us/games/stellar-blade/", "variant": "outline" }
+        { "name": "Steam", "url": "https://store.steampowered.com/app/3489700/_/", "type": "link", "icon": "globe", "variant": "outline" },
+        { "name": "PlayStation", "url": "https://www.playstation.com/en-us/games/stellar-blade/", "type": "link", "icon": "globe", "variant": "outline" }
       ]
     },
     {
@@ -179,8 +179,8 @@
         { "text": "已完成", "variant": "secondary" }
       ],
       "links": [
-        { "text": "Steam", "href": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/", "variant": "outline" },
-        { "text": "官方網站", "href": "https://deathstrandingpc.505games.com/zh-hant/", "variant": "outline" }
+        { "name": "Steam", "url": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/", "type": "link", "icon": "globe", "variant": "outline" },
+        { "name": "官方網站", "url": "https://deathstrandingpc.505games.com/zh-hant/", "type": "link", "icon": "globe", "variant": "outline" }
       ]
     }
   ]

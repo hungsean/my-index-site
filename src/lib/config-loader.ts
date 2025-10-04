@@ -1,5 +1,4 @@
-import type { SiteConfig, Profile, SocialLink, About, ContentItem } from '@/types/config'
-import type { Tag, Link } from '@/components/ContentCard'
+import type { SiteConfig, Profile, SocialLink, About, ContentItem, LegacyContentLink, UnifiedLink } from '@/types/config'
 
 export interface ConfigError {
   field: string
@@ -136,23 +135,20 @@ function validateAbout(about: unknown): { about?: About; errors: ConfigError[] }
 }
 
 /**
- * 驗證標籤陣列
+ * 驗證標籤陣列 - 僅用於檢查格式,不做轉換
  */
-function validateTags(tags: unknown, fieldName: string): { tags: Tag[]; errors: ConfigError[] } {
+function validateTags(tags: unknown, fieldName: string): { errors: ConfigError[] } {
   const errors: ConfigError[] = []
-  
+
   if (!tags) {
-    return { tags: [], errors: [] }
+    return { errors: [] }
   }
-  
+
   if (!Array.isArray(tags)) {
     return {
-      tags: [],
       errors: [{ field: fieldName, message: 'tags 必須是陣列格式', severity: 'error' }]
     }
   }
-
-  const validatedTags: Tag[] = []
 
   ;(tags as unknown[]).forEach((tag, index) => {
     if (!tag || typeof tag !== 'object') {
@@ -173,38 +169,26 @@ function validateTags(tags: unknown, fieldName: string): { tags: Tag[]; errors: 
       })
       return
     }
-
-    const validatedTag: Tag = {
-      content: tagObj.text as string, // 注意：ContentCard 使用 content，不是 text
-      variant: ['default', 'secondary', 'outline', 'destructive'].includes(tagObj.variant as string)
-        ? tagObj.variant as 'default' | 'secondary' | 'outline' | 'destructive' : 'outline',
-      style: ['normal', 'small'].includes(tagObj.style as string) ? tagObj.style as 'normal' | 'small' : 'small'
-    }
-
-    validatedTags.push(validatedTag)
   })
 
-  return { tags: validatedTags, errors }
+  return { errors }
 }
 
 /**
- * 驗證連結陣列
+ * 驗證連結陣列 - 支援新舊兩種格式,僅檢查不做轉換
  */
-function validateLinks(links: unknown, fieldName: string): { links: Link[]; errors: ConfigError[] } {
+function validateLinks(links: unknown, fieldName: string): { errors: ConfigError[] } {
   const errors: ConfigError[] = []
-  
+
   if (!links) {
-    return { links: [], errors: [] }
+    return { errors: [] }
   }
-  
+
   if (!Array.isArray(links)) {
     return {
-      links: [],
       errors: [{ field: fieldName, message: 'links 必須是陣列格式', severity: 'error' }]
     }
   }
-
-  const validatedLinks: Link[] = []
 
   ;(links as unknown[]).forEach((link, index) => {
     if (!link || typeof link !== 'object') {
@@ -217,6 +201,50 @@ function validateLinks(links: unknown, fieldName: string): { links: Link[]; erro
     }
 
     const linkObj = link as Record<string, unknown>
+
+    // 檢查是新版格式 (name + url + type) 還是舊版格式 (text + href)
+    const isNewFormat = 'name' in linkObj && 'url' in linkObj && 'type' in linkObj
+    const isOldFormat = 'text' in linkObj && 'href' in linkObj
+
+    if (!isNewFormat && !isOldFormat) {
+      errors.push({
+        field: `${fieldName}[${index}]`,
+        message: '連結必須包含 (name, url, type) 或 (text, href) 欄位',
+        severity: 'error'
+      })
+      return
+    }
+
+    // 新版格式驗證
+    if (isNewFormat) {
+      if (!linkObj.name || typeof linkObj.name !== 'string') {
+        errors.push({
+          field: `${fieldName}[${index}].name`,
+          message: '連結必須包含有效的 name 欄位',
+          severity: 'error'
+        })
+        return
+      }
+      if (!linkObj.url || typeof linkObj.url !== 'string') {
+        errors.push({
+          field: `${fieldName}[${index}].url`,
+          message: '連結必須包含有效的 url 欄位',
+          severity: 'error'
+        })
+        return
+      }
+      if (!['link', 'copy', 'text'].includes(linkObj.type as string)) {
+        errors.push({
+          field: `${fieldName}[${index}].type`,
+          message: 'type 必須是 link, copy, 或 text',
+          severity: 'error'
+        })
+        return
+      }
+      return
+    }
+
+    // 舊版格式驗證
     if (!linkObj.text || typeof linkObj.text !== 'string') {
       errors.push({
         field: `${fieldName}[${index}].text`,
@@ -234,19 +262,9 @@ function validateLinks(links: unknown, fieldName: string): { links: Link[]; erro
       })
       return
     }
-
-    const validatedLink: Link = {
-      content: linkObj.text as string, // 注意：ContentCard 使用 content，不是 text
-      href: linkObj.href as string,
-      variant: ['default', 'outline', 'secondary', 'ghost', 'link'].includes(linkObj.variant as string)
-        ? linkObj.variant as 'default' | 'outline' | 'secondary' | 'ghost' | 'link' : 'outline',
-      size: ['default', 'sm', 'lg'].includes(linkObj.size as string) ? linkObj.size as 'default' | 'sm' | 'lg' : 'sm'
-    }
-
-    validatedLinks.push(validatedLink)
   })
 
-  return { links: validatedLinks, errors }
+  return { errors }
 }
 
 /**
@@ -296,7 +314,7 @@ function validateContentItems(items: unknown, type: 'projects' | 'games'): { ite
     const { errors: linkErrors } = validateLinks(itemObj.links, `${type}[${index}].links`)
     errors.push(...linkErrors)
 
-    // 直接按照 ContentItem 類型定義構建，配合類型系統
+    // 直接按照 ContentItem 類型定義構建,配合類型系統
     const validatedItem: ContentItem = {
       title: itemObj.title as string,
       description: itemObj.description as string,
@@ -309,16 +327,8 @@ function validateContentItems(items: unknown, type: 'projects' | 'games'): { ite
           ? tag.style as 'normal' | 'small'
           : undefined
       })) : undefined,
-      links: itemObj.links ? (itemObj.links as Record<string, unknown>[]).map((link: Record<string, unknown>) => ({
-        text: link.text as string,
-        href: link.href as string,
-        variant: ['default', 'outline', 'secondary', 'ghost', 'link'].includes(link.variant as string)
-          ? link.variant as 'default' | 'outline' | 'secondary' | 'ghost' | 'link'
-          : undefined,
-        size: ['default', 'sm', 'lg'].includes(link.size as string)
-          ? link.size as 'default' | 'sm' | 'lg'
-          : undefined
-      })) : undefined
+      // 原樣保留 links,支援新舊格式
+      links: itemObj.links as ContentItem['links']
     }
 
     if (itemObj.image_url) {

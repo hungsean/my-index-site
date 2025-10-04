@@ -94,6 +94,7 @@ export function ContentCard({
                   />
                 )
               } else {
+                console.log("legacy link exist: ", link)
                 // 舊版格式：保持原有的 Button 渲染方式
                 return (
                   <Button
