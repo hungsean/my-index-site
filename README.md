@@ -4,7 +4,7 @@
 
 ## 🌐 線上展示
 
-**網域**: [senen.dev](https://senen.dev)
+**網域**: [senen.idv.tw](https://senen.idv.tw)
 
 ## ✨ 核心功能
 
